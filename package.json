@@ -1,0 +1,31 @@
+{
+  "name": "orderease",
+  "version": "1.0.0",
+  "description": "Restaurant Ordering System - Full Stack MERN Application",
+  "scripts": {
+    "install-all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
+    "seed": "npm run seed --prefix backend",
+    "start-backend": "npm run dev --prefix backend",
+    "start-frontend": "npm start --prefix frontend",
+    "build-frontend": "npm run build --prefix frontend"
+  },
+  "keywords": [
+    "restaurant",
+    "ordering",
+    "mern",
+    "react",
+    "nodejs",
+    "mongodb",
+    "express"
+  ],
+  "author": "TechSign",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TECH-SIGN/OrderEase.git"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
