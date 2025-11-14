@@ -1,0 +1,254 @@
+import React, { useState, useEffect } from 'react';
+import api from '../../api/axios';
+import AdminNavbar from '../../components/admin/AdminNavbar';
+
+const OrdersManagementPage = () => {
+  const [orders, setOrders] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState('All');
+  const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const statuses = ['All', 'pending', 'preparing', 'ready', 'delivered'];
+
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 30000); // Refresh every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const { data } = await api.get('/orders');
+      setOrders(data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleStatusUpdate = async (orderId, newStatus) => {
+    try {
+      await api.put(`/orders/${orderId}/status`, { status: newStatus });
+      fetchOrders();
+      setSelectedOrder(null);
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      alert('Failed to update order status');
+    }
+  };
+
+  const getStatusColor = (status) => {
+    const colors = {
+      pending: 'bg-yellow-100 text-yellow-800',
+      preparing: 'bg-blue-100 text-blue-800',
+      ready: 'bg-green-100 text-green-800',
+      delivered: 'bg-green-600 text-white',
+      cancelled: 'bg-red-100 text-red-800',
+    };
+    return colors[status] || 'bg-gray-100 text-gray-800';
+  };
+
+  const filteredOrders = selectedStatus === 'All'
+    ? orders
+    : orders.filter(order => order.status === selectedStatus);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <AdminNavbar />
+      
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Orders Management</h1>
+          <button
+            onClick={fetchOrders}
+            className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+          >
+            🔄 Refresh
+          </button>
+        </div>
+
+        {/* Status Filter */}
+        <div className="flex flex-wrap gap-3 mb-6">
+          {statuses.map((status) => (
+            <button
+              key={status}
+              onClick={() => setSelectedStatus(status)}
+              className={`px-6 py-2 rounded-full font-semibold transition capitalize ${
+                selectedStatus === status
+                  ? 'bg-orange-600 text-white'
+                  : 'bg-white text-gray-700 hover:bg-orange-100'
+              }`}
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
+          </div>
+        ) : filteredOrders.length === 0 ? (
+          <div className="bg-white rounded-lg shadow-md p-12 text-center">
+            <p className="text-gray-600 text-lg">No orders found</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {filteredOrders.map((order) => (
+              <div key={order._id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <p className="text-sm text-gray-600">Order #{order._id.slice(-8)}</p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(order.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
+                      {order.status}
+                    </span>
+                  </div>
+
+                  <div className="mb-4">
+                    <p className="font-semibold text-gray-800">{order.customerName}</p>
+                    <p className="text-sm text-gray-600">{order.phone}</p>
+                    <p className="text-sm text-gray-600 capitalize">
+                      {order.orderType}
+                      {order.tableNumber && ` - Table ${order.tableNumber}`}
+                    </p>
+                  </div>
+
+                  <div className="border-t pt-4 mb-4">
+                    <p className="font-semibold text-gray-800 mb-2">Items:</p>
+                    <ul className="space-y-1">
+                      {order.items.map((item, index) => (
+                        <li key={index} className="text-sm text-gray-700 flex justify-between">
+                          <span>{item.name} x {item.quantity}</span>
+                          <span>₹{item.price * item.quantity}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="border-t pt-4 mb-4">
+                    <div className="flex justify-between font-bold text-lg">
+                      <span>Total</span>
+                      <span className="text-orange-600">₹{order.totalPrice}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    {order.status === 'pending' && (
+                      <button
+                        onClick={() => handleStatusUpdate(order._id, 'preparing')}
+                        className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm"
+                      >
+                        Start Preparing
+                      </button>
+                    )}
+                    {order.status === 'preparing' && (
+                      <button
+                        onClick={() => handleStatusUpdate(order._id, 'ready')}
+                        className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm"
+                      >
+                        Mark Ready
+                      </button>
+                    )}
+                    {order.status === 'ready' && (
+                      <button
+                        onClick={() => handleStatusUpdate(order._id, 'delivered')}
+                        className="flex-1 bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition text-sm"
+                      >
+                        Mark Delivered
+                      </button>
+                    )}
+                    <button
+                      onClick={() => setSelectedOrder(order)}
+                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm"
+                    >
+                      Details
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Order Details Modal */}
+        {selectedOrder && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Order Details</h2>
+              
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm text-gray-600">Order ID</p>
+                  <p className="font-semibold">{selectedOrder._id}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Customer</p>
+                  <p className="font-semibold">{selectedOrder.customerName}</p>
+                  <p className="text-sm">{selectedOrder.phone}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Order Type</p>
+                  <p className="font-semibold capitalize">{selectedOrder.orderType}</p>
+                </div>
+                {selectedOrder.tableNumber && (
+                  <div>
+                    <p className="text-sm text-gray-600">Table Number</p>
+                    <p className="font-semibold">{selectedOrder.tableNumber}</p>
+                  </div>
+                )}
+                {selectedOrder.deliveryAddress && (
+                  <div>
+                    <p className="text-sm text-gray-600">Delivery Address</p>
+                    <p className="font-semibold">{selectedOrder.deliveryAddress}</p>
+                  </div>
+                )}
+                <div>
+                  <p className="text-sm text-gray-600">Status</p>
+                  <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedOrder.status)}`}>
+                    {selectedOrder.status}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600 mb-2">Items</p>
+                  <ul className="space-y-2">
+                    {selectedOrder.items.map((item, index) => (
+                      <li key={index} className="flex justify-between">
+                        <span>{item.name} x {item.quantity}</span>
+                        <span className="font-semibold">₹{item.price * item.quantity}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="border-t pt-3">
+                  <div className="flex justify-between font-bold text-lg">
+                    <span>Total</span>
+                    <span className="text-orange-600">₹{selectedOrder.totalPrice}</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Order Time</p>
+                  <p className="text-sm">{new Date(selectedOrder.createdAt).toLocaleString()}</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setSelectedOrder(null)}
+                className="w-full mt-6 bg-gray-200 text-gray-700 py-2 rounded-lg font-semibold hover:bg-gray-300 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default OrdersManagementPage;
