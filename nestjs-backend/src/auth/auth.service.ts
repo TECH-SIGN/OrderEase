@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../database';
 import { SignUpDto, LoginDto } from './dto';
-import { hashPassword, comparePassword } from '../utils';
+import { hashPassword, comparePassword, parseJwtExpiration } from '../utils';
 import { MESSAGES, Role } from '../constants';
 
 @Injectable()
@@ -103,27 +103,23 @@ export class AuthService {
    */
   private generateTokens(userId: string, email: string, role: string) {
     const payload = { sub: userId, email, role };
-    const accessExpiresIn =
-      this.configService.get<string>('jwt.expiresIn') ?? '7d';
-    const refreshExpiresIn =
-      this.configService.get<string>('jwt.refreshExpiresIn') ?? '30d';
+    const accessExpiresIn = parseJwtExpiration(
+      this.configService.get<string>('jwt.expiresIn'),
+      '7d',
+    );
+    const refreshExpiresIn = parseJwtExpiration(
+      this.configService.get<string>('jwt.refreshExpiresIn'),
+      '30d',
+    );
 
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('jwt.secret'),
-      expiresIn: accessExpiresIn as
-        | `${number}d`
-        | `${number}h`
-        | `${number}m`
-        | `${number}s`,
+      expiresIn: accessExpiresIn,
     });
 
     const refreshToken = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('jwt.refreshSecret'),
-      expiresIn: refreshExpiresIn as
-        | `${number}d`
-        | `${number}h`
-        | `${number}m`
-        | `${number}s`,
+      expiresIn: refreshExpiresIn,
     });
 
     return {

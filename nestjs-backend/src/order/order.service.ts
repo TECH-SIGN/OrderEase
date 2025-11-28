@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../database';
-import { CreateOrderDto, UpdateOrderStatusDto } from './order.dto';
+import { CreateOrderDto, UpdateOrderStatusDto, OrderStatus } from './order.dto';
 import { MESSAGES } from '../constants';
+import { OrderStatus as PrismaOrderStatus } from '@prisma/client';
 
 @Injectable()
 export class OrderService {
@@ -65,7 +66,12 @@ export class OrderService {
    */
   async findAll(page = 1, limit = 10, status?: string) {
     const skip = (page - 1) * limit;
-    const where = status ? { status: status as never } : {};
+    const where: { status?: PrismaOrderStatus } = {};
+
+    // Validate and set status filter if provided
+    if (status && Object.values(OrderStatus).includes(status as OrderStatus)) {
+      where.status = status as PrismaOrderStatus;
+    }
 
     const [orders, total] = await Promise.all([
       this.prisma.order.findMany({
@@ -123,7 +129,7 @@ export class OrderService {
 
     return this.prisma.order.update({
       where: { id },
-      data: { status: updateStatusDto.status },
+      data: { status: updateStatusDto.status as PrismaOrderStatus },
       include: {
         user: { select: { id: true, email: true, name: true } },
         orderItems: {
