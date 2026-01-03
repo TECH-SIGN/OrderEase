@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { LoggingInterceptor, GlobalExceptionFilter } from './gateway';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +29,12 @@ async function bootstrap() {
     }),
   );
 
+  // Global interceptors (API Gateway - Logging)
+  app.useGlobalInterceptors(new LoggingInterceptor());
+
+  // Global exception filter (API Gateway - Error Handling)
+  app.useGlobalFilters(new GlobalExceptionFilter());
+
   // Global prefix for API routes
   app.setGlobalPrefix('api');
 
@@ -35,6 +42,7 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`🚀 OrderEase RBAC API is running on: http://localhost:${port}`);
   console.log(`📚 API endpoints available at: http://localhost:${port}/api`);
+  console.log(`🛡️  API Gateway active with logging and error handling`);
 }
 bootstrap().catch((err) => {
   console.error('Failed to start application:', err);

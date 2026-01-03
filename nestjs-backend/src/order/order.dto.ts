@@ -5,6 +5,8 @@ import {
   ValidateNested,
   Min,
   IsEnum,
+  IsOptional,
+  IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -22,6 +24,12 @@ export class CreateOrderDto {
   @ValidateNested({ each: true })
   @Type(() => CreateOrderItemDto)
   items: CreateOrderItemDto[];
+}
+
+export class CreateOrderFromCartDto {
+  @IsOptional()
+  @IsBoolean()
+  clearCart?: boolean;
 }
 
 export enum OrderStatus {
