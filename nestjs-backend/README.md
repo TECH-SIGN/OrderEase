@@ -174,23 +174,50 @@ npm run start:prod
 | PUT | `/api/food/:id` | Update food item |
 | DELETE | `/api/food/:id` | Delete food item |
 
+### Cart (Authenticated Users)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/cart` | Get current user's cart |
+| POST | `/api/cart` | Add item to cart |
+| PUT | `/api/cart/:itemId` | Update cart item quantity |
+| DELETE | `/api/cart/:itemId` | Remove item from cart |
+| DELETE | `/api/cart` | Clear entire cart |
+
 ### Orders
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/order` | Create order (authenticated) |
+| POST | `/api/order` | Create order with items (authenticated) |
+| POST | `/api/order/from-cart` | Create order from cart (authenticated) |
 | GET | `/api/order` | List orders (admin only) |
 | GET | `/api/order/:id` | Get order by ID |
 | PUT | `/api/order/:id/status` | Update order status (admin) |
 | DELETE | `/api/order/:id` | Delete order (admin) |
 
+## 🏗️ Architecture
+
+This backend follows a **modular monolith** architecture with clear service boundaries:
+
+- **API Gateway Layer**: Request logging, error handling, rate limiting
+- **Auth Module**: JWT authentication and RBAC
+- **User Module**: User profile management
+- **Admin Module**: Administrative functions
+- **Food Module**: Menu and food item management
+- **Cart Module**: Shopping cart functionality (NEW)
+- **Order Module**: Order processing and management
+- **Public Module**: Public endpoints (no auth required)
+
+For detailed architecture documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+
 ## 🔒 Security Features
 
 - Password hashing with bcrypt
-- JWT-based authentication
-- Refresh token support
-- Role-based access control
+- JWT-based authentication with refresh tokens
+- Role-based access control (RBAC)
 - Input validation with class-validator
+- Global exception handling
+- Rate limiting (100 req/15min per IP)
 - CORS configuration
+- Request/response logging
 - Environment-based configuration
 
 ## 📝 Default Users (After Seeding)

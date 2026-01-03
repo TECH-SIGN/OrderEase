@@ -11,7 +11,11 @@ import {
   DefaultValuePipe,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { CreateOrderDto, UpdateOrderStatusDto } from './order.dto';
+import {
+  CreateOrderDto,
+  CreateOrderFromCartDto,
+  UpdateOrderStatusDto,
+} from './order.dto';
 import { Auth, CurrentUser } from '../auth/decorators';
 import { Role, MESSAGES } from '../constants';
 import { successResponse } from '../utils';
@@ -32,6 +36,23 @@ export class OrderController {
   ) {
     const order = await this.orderService.create(userId, createOrderDto);
     return successResponse('Order created successfully', order);
+  }
+
+  /**
+   * Create order from cart (Logged-in users)
+   * POST /order/from-cart
+   */
+  @Post('from-cart')
+  @Auth() // Any authenticated user can create orders
+  async createFromCart(
+    @CurrentUser('id') userId: string,
+    @Body() createOrderFromCartDto: CreateOrderFromCartDto,
+  ) {
+    const order = await this.orderService.createFromCart(
+      userId,
+      createOrderFromCartDto,
+    );
+    return successResponse('Order created from cart successfully', order);
   }
 
   /**
