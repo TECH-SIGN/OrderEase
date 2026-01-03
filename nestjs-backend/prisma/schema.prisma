@@ -28,6 +28,7 @@ model User {
 
   // Relations
   orders    Order[]
+  cart      Cart?
 
   @@map("users")
 }
@@ -46,6 +47,7 @@ model Food {
 
   // Relations
   orderItems OrderItem[]
+  cartItems  CartItem[]
 
   @@map("foods")
 }
@@ -87,4 +89,35 @@ enum OrderStatus {
   READY
   DELIVERED
   CANCELLED
+}
+
+// Cart model for user shopping cart
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  // Relations
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartItems CartItem[]
+
+  @@map("carts")
+}
+
+// Cart item model
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  foodId    String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  food Food @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, foodId])
+  @@map("cart_items")
 }

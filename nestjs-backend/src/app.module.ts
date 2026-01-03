@@ -9,6 +9,7 @@ import { UserModule } from './user';
 import { PublicModule } from './public';
 import { FoodModule } from './food';
 import { OrderModule } from './order';
+import { CartModule } from './cart';
 import { appConfig, databaseConfig, jwtConfig } from './config';
 
 @Module({
@@ -26,6 +27,7 @@ import { appConfig, databaseConfig, jwtConfig } from './config';
     UserModule,
     PublicModule,
     FoodModule,
+    CartModule,
     OrderModule,
   ],
   controllers: [AppController],
