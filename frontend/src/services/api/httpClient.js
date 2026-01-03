@@ -4,7 +4,7 @@
  */
 
 import axios from 'axios';
-import apiConfig, { ERROR_MESSAGES } from '../../config/api.config';
+import apiConfig, { ERROR_MESSAGES, API_ENDPOINTS } from '../../config/api.config';
 
 // Create axios instance
 const httpClient = axios.create(apiConfig);
@@ -16,6 +16,18 @@ const TokenManager = {
   removeToken: () => localStorage.removeItem('token'),
   getRefreshToken: () => localStorage.getItem('refreshToken'),
   setRefreshToken: (token) => localStorage.setItem('refreshToken', token),
+  removeRefreshToken: () => localStorage.removeItem('refreshToken'),
+  getUser: () => {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  },
+  setUser: (user) => localStorage.setItem('user', JSON.stringify(user)),
+  removeUser: () => localStorage.removeItem('user'),
+  clearAll: () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+  },
 };
 
 // Track if token refresh is in progress
@@ -109,7 +121,7 @@ httpClient.interceptors.response.use(
       try {
         // Attempt to refresh the token
         const { data } = await axios.post(
-          `${apiConfig.baseURL}/auth/refresh`,
+          `${apiConfig.baseURL}${API_ENDPOINTS.AUTH.REFRESH}`,
           { refreshToken }
         );
 
@@ -130,7 +142,7 @@ httpClient.interceptors.response.use(
         processQueue(refreshError, null);
         isRefreshing = false;
         TokenManager.removeToken();
-        TokenManager.removeToken();
+        TokenManager.removeRefreshToken();
         window.dispatchEvent(new CustomEvent('auth:logout'));
         return Promise.reject({
           message: ERROR_MESSAGES.UNAUTHORIZED,

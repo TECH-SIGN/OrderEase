@@ -9,8 +9,9 @@
  * @returns {boolean} True if valid
  */
 export const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  // More comprehensive email validation
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  return emailRegex.test(email) && email.length <= 254;
 };
 
 /**
@@ -19,8 +20,16 @@ export const isValidEmail = (email) => {
  * @returns {boolean} True if valid
  */
 export const isValidPhone = (phone) => {
-  const phoneRegex = /^\+?[\d\s-()]+$/;
-  return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10;
+  // Validate common US phone formats: (123) 456-7890, 123-456-7890, 1234567890
+  const cleaned = phone.replace(/\D/g, '');
+  if (cleaned.length < 10 || cleaned.length > 11) {
+    return false;
+  }
+  // If 11 digits, first digit must be 1 (country code)
+  if (cleaned.length === 11 && cleaned[0] !== '1') {
+    return false;
+  }
+  return true;
 };
 
 /**

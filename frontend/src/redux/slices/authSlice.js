@@ -71,6 +71,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
+      // Note: localStorage is used here for persistence. 
+      // In production, consider using Redux middleware or sessionStorage
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
@@ -79,6 +81,7 @@ const authSlice = createSlice({
       localStorage.setItem('token', action.payload.token);
     },
     logout: (state) => {
+      // Note: localStorage clearing is done here for immediate state consistency
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;

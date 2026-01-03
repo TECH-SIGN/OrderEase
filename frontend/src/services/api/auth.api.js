@@ -106,10 +106,8 @@ const authApi = {
       // Continue with logout even if API call fails
       console.error('Logout API call failed:', error);
     } finally {
-      // Always clear local storage
-      TokenManager.removeToken();
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
+      // Always clear all stored credentials using TokenManager
+      TokenManager.clearAll();
     }
   },
 };
