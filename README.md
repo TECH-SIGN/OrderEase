@@ -1,280 +1,725 @@
 # OrderEase - Restaurant Ordering System
 
-A complete full-stack restaurant ordering system with modern architecture. This project showcases professional backend design with a modular monolith pattern, comprehensive API Gateway, and production-ready features.
+A modern, full-stack restaurant ordering system built with NestJS, React, PostgreSQL, and Prisma. This project demonstrates production-ready architecture with modular design, comprehensive authentication, role-based access control, and industry best practices.
 
-## 🚀 Features
+## 📖 Table of Contents
+
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Architecture](#-architecture)
+- [Tech Stack](#-tech-stack)
+- [Prerequisites](#-prerequisites)
+- [Local Setup](#-local-setup)
+- [Environment Configuration](#-environment-configuration)
+- [Running the Application](#-running-the-application)
+- [Project Structure](#-project-structure)
+- [API Documentation](#-api-documentation)
+- [Database Schema](#-database-schema)
+- [Security Features](#-security-features)
+- [Troubleshooting](#-troubleshooting)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+## 🎯 Overview
+
+OrderEase is a comprehensive restaurant ordering platform that enables customers to browse menus, manage shopping carts, and place orders, while providing administrators with powerful tools for menu management, order processing, and business analytics. The system is built with scalability, security, and developer experience in mind.
+
+**What makes OrderEase special:**
+- **Production-Ready**: Built with enterprise-grade architecture patterns
+- **Type-Safe**: Full TypeScript implementation across frontend and backend
+- **Secure**: JWT authentication, RBAC, input validation, and security best practices
+- **Modern Stack**: Latest versions of NestJS, React 18, and PostgreSQL with Prisma ORM
+- **Well-Documented**: Comprehensive API documentation and inline code comments
+
+## 🚀 Key Features
 
 ### Customer Features
-- 📱 Browse menu by categories (Starters, Main Course, Drinks, etc.)
-- 🛒 Shopping cart with quantity management
-- 📝 Place orders with dine-in or delivery options
-- ✅ Order confirmation with real-time status
-- 💳 Mobile-responsive design
+- 📱 **Browse Menu**: View menu items organized by categories (Starters, Main Course, Desserts, Drinks, etc.)
+- 🛒 **Shopping Cart**: Add/remove items, adjust quantities, view cart summary
+- 📝 **Order Placement**: Create orders with dine-in or delivery options
+- ✅ **Order Tracking**: View order confirmation and real-time order status
+- 💳 **Responsive Design**: Mobile-first design that works on all devices
 
 ### Admin Features
-- 🔐 Secure JWT authentication with RBAC
-- 📊 Dashboard with order statistics and revenue tracking
-- 📋 Menu management (CRUD operations)
-- 🍽️ Order management with status updates
-- 👤 User management
-- 🔐 Role-based access control
+- 🔐 **Secure Authentication**: JWT-based authentication with role-based access control
+- 📊 **Dashboard Analytics**: View order statistics, revenue tracking, and key metrics
+- 📋 **Menu Management**: Full CRUD operations for menu items with categories
+- 🍽️ **Order Management**: View all orders and update status (Pending → Preparing → Ready → Delivered)
+- 👤 **User Management**: Manage user accounts and roles
+- 🔐 **RBAC Protection**: Role-based access to admin-only features
 
 ## 🏗️ Architecture
 
-This project features **two backend implementations**:
+OrderEase uses a **modular monolith architecture** with clear separation of concerns:
 
-### 1. NestJS Backend (Recommended - Production Ready)
-Located in `/nestjs-backend/`
+### Backend Architecture (NestJS)
 
-**Architecture:**
-- **Modular Monolith** with clear service boundaries
-- **API Gateway Layer** for centralized logging, error handling, and rate limiting
-- **Role-Based Access Control (RBAC)** with JWT authentication
-- **PostgreSQL** with Prisma ORM
-- **Production-ready** with comprehensive security features
+The backend is located in `/backend/` and follows a modular, domain-driven design:
 
-**Modules:**
-- Auth Service - JWT authentication and authorization
-- User Service - User profile management
-- Admin Service - Administrative functions
-- Food Service - Menu and food item management
-- Cart Service - Shopping cart functionality
-- Order Service - Order processing and management
-- Public Service - Public endpoints (no auth required)
+```
+Gateway Layer (Interceptors, Guards, Filters)
+    ↓
+Controllers (HTTP request handling)
+    ↓
+Services (Business logic)
+    ↓
+Database Layer (Prisma ORM)
+    ↓
+PostgreSQL Database
+```
 
-**Features:**
-- ✅ Request/response logging
-- ✅ Centralized error handling
-- ✅ Rate limiting (100 req/15min per IP)
-- ✅ Input validation with class-validator
-- ✅ Database transactions for data consistency
-- ✅ Comprehensive API documentation
+**Key Architectural Components:**
 
-[📚 NestJS Backend Documentation](./nestjs-backend/README.md)
+- **API Gateway Layer**: Centralized logging, error handling, and rate limiting
+- **Authentication Module**: JWT-based auth with access and refresh tokens
+- **Authorization Guards**: Role-based access control (RBAC) with decorators
+- **Service Modules**: Domain-separated services (Auth, User, Admin, Food, Cart, Order, Public)
+- **Database Layer**: Prisma ORM with type-safe database access
+- **Validation Layer**: DTO-based validation with class-validator
 
-### 2. Express.js Backend (Legacy)
-Located in `/backend/`
+### Frontend Architecture (React)
 
-Simple Express.js implementation with MongoDB.
+The frontend is located in `/frontend/` and uses modern React patterns:
+
+```
+Pages (Route components)
+    ↓
+Components (Reusable UI)
+    ↓
+Redux Store (State management)
+    ↓
+API Services (HTTP client)
+    ↓
+Backend API
+```
+
+**Key Frontend Components:**
+
+- **Redux Toolkit**: Centralized state management for auth, cart, and orders
+- **React Router v6**: Client-side routing with protected routes
+- **API Services**: Axios-based HTTP client with interceptors
+- **Component Library**: Reusable UI components (Navbar, Cards, Forms, etc.)
+- **Tailwind CSS**: Utility-first styling framework
 
 ## 🛠️ Tech Stack
 
-**Frontend:**
-- React 18
-- Redux Toolkit (State Management)
-- React Router v6
-- Tailwind CSS
-- Axios
+### Backend (NestJS + PostgreSQL)
+- **Framework**: [NestJS](https://nestjs.com/) - Progressive Node.js framework
+- **Language**: [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
+- **Database**: [PostgreSQL](https://www.postgresql.org/) - Reliable relational database
+- **ORM**: [Prisma](https://www.prisma.io/) - Next-generation ORM with type safety
+- **Authentication**: [JWT](https://jwt.io/) - JSON Web Tokens with refresh token support
+- **Validation**: [class-validator](https://github.com/typestack/class-validator) - Decorator-based validation
+- **Password Hashing**: [bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Secure password hashing
+- **API Documentation**: Comprehensive endpoint documentation in `/backend/API.md`
 
-**Backend (NestJS - Recommended):**
-- NestJS Framework
-- PostgreSQL with Prisma ORM
-- JWT Authentication with refresh tokens
-- TypeScript
-- bcrypt for password hashing
-- class-validator for input validation
+### Frontend (React)
+- **Framework**: [React 18](https://react.dev/) - Modern UI library
+- **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/) - Simplified Redux
+- **Routing**: [React Router v6](https://reactrouter.com/) - Client-side routing
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- **HTTP Client**: [Axios](https://axios-http.com/) - Promise-based HTTP client
+- **Testing**: [React Testing Library](https://testing-library.com/react) - Component testing
 
-**Backend (Express - Legacy):**
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- JWT Authentication
-- bcryptjs for password hashing
+### Development Tools
+- **Package Manager**: npm (Node Package Manager)
+- **Code Quality**: ESLint, Prettier
+- **Version Control**: Git
+- **Database Management**: Prisma Studio (GUI for database)
 
 ## 📋 Prerequisites
 
-**For NestJS Backend (Recommended):**
-- Node.js (v18 or higher)
-- PostgreSQL database
-- npm or yarn package manager
+Before setting up OrderEase, ensure you have the following installed on your system:
 
-**For Express Backend (Legacy):**
-- Node.js (v14 or higher)
-- MongoDB installed locally or MongoDB Atlas account
-- npm or yarn package manager
+### Required Software
 
-## 🔧 Quick Start
+1. **Node.js (v18.x or higher)**
+   - Download: [https://nodejs.org/](https://nodejs.org/)
+   - Verify installation: `node --version`
+   - Recommended: Use the LTS (Long Term Support) version
 
-### Option 1: NestJS Backend (Recommended)
+2. **PostgreSQL (v14.x or higher)**
+   - Download: [https://www.postgresql.org/download/](https://www.postgresql.org/download/)
+   - Verify installation: `psql --version`
+   - Alternative: Use a cloud PostgreSQL service (Railway, Supabase, etc.)
 
-#### 1. Clone and setup
+3. **npm (v8.x or higher)**
+   - Comes bundled with Node.js
+   - Verify installation: `npm --version`
+
+4. **Git (optional, for cloning)**
+   - Download: [https://git-scm.com/](https://git-scm.com/)
+   - Verify installation: `git --version`
+
+### System Requirements
+
+- **Operating System**: Windows 10/11, macOS 10.15+, or Linux
+- **RAM**: Minimum 4GB (8GB recommended for development)
+- **Disk Space**: At least 2GB free space for dependencies
+- **Network**: Internet connection for installing packages
+
+## 🔧 Local Setup
+
+Follow these steps to set up OrderEase on your local machine for the first time.
+
+### Step 1: Clone the Repository
+
 ```bash
+# Clone via HTTPS
 git clone https://github.com/TECH-SIGN/OrderEase.git
-cd OrderEase/nestjs-backend
-npm install
+
+# OR clone via SSH (if you have SSH keys set up)
+git clone git@github.com:TECH-SIGN/OrderEase.git
+
+# Navigate into the project directory
+cd OrderEase
 ```
 
-#### 2. Configure environment
-Create `.env` file:
+### Step 2: Setup PostgreSQL Database
+
+**Option A: Local PostgreSQL**
+
+1. Start PostgreSQL service:
+   ```bash
+   # On Windows (if installed as service)
+   # PostgreSQL should start automatically
+   
+   # On macOS
+   brew services start postgresql
+   
+   # On Linux
+   sudo systemctl start postgresql
+   ```
+
+2. Create the database:
+   ```bash
+   # Connect to PostgreSQL
+   psql -U postgres
+   
+   # Create database
+   CREATE DATABASE orderease;
+   
+   # Exit psql
+   \q
+   ```
+
+**Option B: Cloud PostgreSQL (Railway/Supabase)**
+
+1. Create a free PostgreSQL database on [Railway](https://railway.app/) or [Supabase](https://supabase.com/)
+2. Copy the connection string provided
+3. You'll use this in the environment configuration
+
+### Step 3: Install Backend Dependencies
+
+```bash
+# Navigate to backend directory
+cd backend
+
+# Install all dependencies
+npm install
+
+# This will install:
+# - NestJS core and platform
+# - Prisma ORM and client
+# - Authentication libraries (JWT, bcrypt, passport)
+# - Validation libraries
+# - And all other dependencies
+```
+
+### Step 4: Install Frontend Dependencies
+
+Open a new terminal window and run:
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install all dependencies
+npm install
+
+# This will install:
+# - React and React DOM
+# - Redux Toolkit
+# - React Router
+# - Axios
+# - Tailwind CSS
+# - And all other dependencies
+```
+
+## 🔐 Environment Configuration
+
+### Backend Environment Variables
+
+Create a `.env` file in the `/backend` directory:
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Edit the `.env` file with your configuration:
+
 ```env
-DATABASE_URL="postgresql://postgres:password@localhost:5432/orderease"
-JWT_SECRET=your_super_secret_jwt_key
-JWT_REFRESH_SECRET=your_refresh_secret_key
+# Database Connection
+# For local PostgreSQL:
+DATABASE_URL="postgresql://postgres:password@localhost:5432/orderease?schema=public"
+# For cloud PostgreSQL, use the connection string provided by your service
+
+# JWT Secrets (IMPORTANT: Change these in production!)
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+JWT_EXPIRES_IN=7d
+JWT_REFRESH_SECRET=your_super_secret_refresh_key_change_this_in_production
+JWT_REFRESH_EXPIRES_IN=30d
+
+# Application Settings
 PORT=3000
 NODE_ENV=development
+
+# CORS Configuration
+# Update this if your frontend runs on a different port
 CORS_ORIGIN=http://localhost:3001
 ```
 
-#### 3. Setup database
-```bash
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:seed
-```
+**Configuration Notes:**
 
-#### 4. Start server
-```bash
-npm run start:dev
-```
+- **DATABASE_URL**: Replace `postgres:password` with your PostgreSQL username and password
+- **JWT_SECRET**: Use a strong, random string for production (e.g., generate with `openssl rand -base64 32`)
+- **PORT**: Backend will run on this port (default: 3000)
+- **CORS_ORIGIN**: Frontend URL for CORS configuration
 
-The API will be running on `http://localhost:3000/api`
+### Frontend Environment Variables
 
-**Default Users After Seeding:**
-- Admin: `admin@orderease.com` / `admin123`
-- User: `user@orderease.com` / `user123`
-
-**Documentation:**
-- [Architecture Guide](./nestjs-backend/ARCHITECTURE.md)
-- [API Reference](./nestjs-backend/API.md)
-- [Development Guide](./nestjs-backend/README.md)
-
-### Option 2: Express Backend (Legacy)
-
-#### 1. Setup backend
-```bash
-cd backend
-npm install
-```
-
-Create a `.env` file in the backend directory:
-```env
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/orderease
-JWT_SECRET=your_jwt_secret_key_here
-NODE_ENV=development
-```
-
-Start the backend server:
-```bash
-npm run dev
-```
-
-The API will be running on `http://localhost:5000`
-
-#### 2. Frontend Setup
+Create a `.env` file in the `/frontend` directory:
 
 ```bash
 cd frontend
-npm install
+cp .env.example .env
 ```
 
-Create a `.env` file in the frontend directory:
+Edit the `.env` file:
+
 ```env
-REACT_APP_API_URL=http://localhost:5000/api
+# API Configuration
+# Point to your backend API endpoint
+REACT_APP_API_GATEWAY_URL=http://localhost:3000/api
+REACT_APP_API_URL=http://localhost:3000/api
+
+# Environment
+NODE_ENV=development
+
+# Optional: Feature flags
+REACT_APP_ENABLE_ANALYTICS=false
+REACT_APP_ENABLE_LOGGING=true
 ```
 
-Start the React development server:
+**Configuration Notes:**
+
+- **REACT_APP_API_URL**: Must match the backend PORT in backend `.env`
+- The frontend will run on `http://localhost:3001` by default
+- All environment variables must start with `REACT_APP_` to be accessible in React
+
+## 🚀 Running the Application
+
+### Initialize the Database
+
+Before running the application for the first time, you need to set up the database:
+
 ```bash
+# Navigate to backend directory
+cd backend
+
+# Generate Prisma Client (creates type-safe database client)
+npm run prisma:generate
+
+# Run database migrations (creates tables and schema)
+npm run prisma:migrate
+
+# Seed the database with initial data
+npm run prisma:seed
+```
+
+**What the seed command creates:**
+
+- **Sample Menu Items**: 12 food items across 5 categories
+  - Starters: Spring Rolls, Garlic Bread, Chicken Wings
+  - Main Course: Margherita Pizza, Grilled Chicken, Pasta Carbonara, Butter Chicken
+  - Desserts: Chocolate Cake, Ice Cream Sundae
+  - Drinks: Fresh Juice, Iced Coffee, Milkshake
+
+- **Default Admin Account**:
+  - Email: `admin@orderease.com`
+  - Password: `admin123`
+  - Role: ADMIN
+
+- **Default User Account**:
+  - Email: `user@orderease.com`
+  - Password: `user123`
+  - Role: USER
+
+### Start the Backend Server
+
+```bash
+# Make sure you're in the backend directory
+cd backend
+
+# Start in development mode (with hot reload)
+npm run start:dev
+
+# Alternative: Start in production mode
+# npm run start:prod
+```
+
+You should see output similar to:
+```
+[Nest] 12345  - 01/05/2026, 8:25:41 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 12345  - 01/05/2026, 8:25:41 PM     LOG [InstanceLoader] AppModule dependencies initialized
+[Nest] 12345  - 01/05/2026, 8:25:41 PM     LOG [RoutesResolver] AuthController {/api/auth}
+[Nest] 12345  - 01/05/2026, 8:25:41 PM     LOG [NestApplication] Nest application successfully started
+Server is running on: http://localhost:3000
+API endpoints: http://localhost:3000/api
+```
+
+### Start the Frontend Development Server
+
+Open a **new terminal window** (keep the backend running):
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Start the React development server
 npm start
 ```
 
-The application will open at `http://localhost:3000`
+The application will automatically open in your default browser at:
+- **Frontend**: `http://localhost:3001`
+- **Backend API**: `http://localhost:3000/api`
 
-## 📚 Key API Endpoints
+### Verify Everything is Working
 
-### NestJS Backend
+1. **Check Backend Health**:
+   ```bash
+   curl http://localhost:3000/api/public/health
+   ```
+   Should return: `{"status":"ok","timestamp":"..."}`
 
-**Authentication:**
-- `POST /api/auth/signup` - Register new user
-- `POST /api/auth/login` - Login user
-- `POST /api/auth/refresh` - Refresh access token
+2. **Check Frontend**:
+   - Open `http://localhost:3001` in your browser
+   - You should see the OrderEase homepage with menu items
 
-**Cart (Authenticated):**
-- `GET /api/cart` - Get user's cart
-- `POST /api/cart` - Add item to cart
-- `PUT /api/cart/:itemId` - Update cart item quantity
-- `DELETE /api/cart/:itemId` - Remove item from cart
+3. **Test Login**:
+   - Click "Admin" in the navigation bar
+   - Login with `admin@orderease.com` / `admin123`
+   - You should be redirected to the admin dashboard
 
-**Orders:**
-- `POST /api/order/from-cart` - Create order from cart (Recommended)
-- `POST /api/order` - Create order with items
-- `GET /api/order` - Get all orders (Admin only)
-- `PUT /api/order/:id/status` - Update order status (Admin only)
+### Common Commands
 
-**Food Management (Admin):**
-- `POST /api/food` - Create food item
-- `GET /api/food` - List all food items
-- `PUT /api/food/:id` - Update food item
-- `DELETE /api/food/:id` - Delete food item
+**Backend Commands:**
+```bash
+# Development mode (with hot reload)
+npm run start:dev
 
-**Public:**
-- `GET /api/public/menu` - Browse menu (no auth required)
-- `GET /api/public/health` - Health check
+# Production mode
+npm run start:prod
 
-📖 **Full API Documentation**: [API.md](./nestjs-backend/API.md)
+# Build the application
+npm run build
 
-### Express Backend (Legacy)
+# Run tests
+npm run test
 
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/menu` - Get all menu items
-- `POST /api/orders` - Create new order
-- `GET /api/orders` - Get all orders (Admin only)
+# Database commands
+npm run prisma:studio        # Open Prisma Studio (database GUI)
+npm run prisma:migrate      # Run migrations
+npm run prisma:seed         # Seed database
+npm run db:setup            # One command to setup everything
+```
 
-## 📱 Typical User Flow
+**Frontend Commands:**
+```bash
+# Start development server
+npm start
 
-### Customer Journey (NestJS Backend)
+# Build for production
+npm run build
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test -- --coverage
+```
+
+**Root-Level Commands:**
+```bash
+# Install all dependencies (backend + frontend)
+npm run install-all
+
+# Start both backend and frontend concurrently
+npm run dev
+
+# Seed backend database
+npm run seed
+```
+
+## 📚 API Documentation
+
+### Base URL
+```
+http://localhost:3000/api
+```
+
+### Authentication
+
+All authenticated endpoints require a JWT token in the Authorization header:
+```
+Authorization: Bearer <your_jwt_token>
+```
+
+### Core API Endpoints
+
+#### **Authentication** (`/api/auth`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/auth/signup` | Register new user | No |
+| POST | `/auth/login` | Login user | No |
+| POST | `/auth/refresh` | Refresh access token | No |
+
+**Example Login Request:**
+```json
+POST /api/auth/login
+{
+  "email": "user@orderease.com",
+  "password": "user123"
+}
+```
+
+**Example Response:**
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "clx...",
+    "email": "user@orderease.com",
+    "name": "Test User",
+    "role": "USER"
+  }
+}
+```
+
+#### **Public Endpoints** (`/api/public`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/public/menu` | Get all menu items | No |
+| GET | `/public/health` | Health check | No |
+
+#### **Cart Management** (`/api/cart`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/cart` | Get user's cart | Yes (USER) |
+| POST | `/cart` | Add item to cart | Yes (USER) |
+| PUT | `/cart/:itemId` | Update cart item quantity | Yes (USER) |
+| DELETE | `/cart/:itemId` | Remove item from cart | Yes (USER) |
+| DELETE | `/cart` | Clear entire cart | Yes (USER) |
+
+#### **Order Management** (`/api/order`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/order/from-cart` | Create order from cart | Yes (USER) |
+| POST | `/order` | Create order with items | Yes (USER) |
+| GET | `/order` | Get all orders | Yes (ADMIN) |
+| GET | `/order/:id` | Get specific order | Yes (USER/ADMIN) |
+| PUT | `/order/:id/status` | Update order status | Yes (ADMIN) |
+
+**Order Status Flow:**
+```
+PENDING → PREPARING → READY → DELIVERED
+         ↓
+      CANCELLED (at any point)
+```
+
+#### **Food/Menu Management** (`/api/food`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/food` | Create food item | Yes (ADMIN) |
+| GET | `/food` | Get all food items | Yes (ADMIN) |
+| GET | `/food/:id` | Get specific food item | Yes (ADMIN) |
+| PUT | `/food/:id` | Update food item | Yes (ADMIN) |
+| DELETE | `/food/:id` | Delete food item | Yes (ADMIN) |
+
+#### **Admin Endpoints** (`/api/admin`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/admin/dashboard` | Get dashboard stats | Yes (ADMIN) |
+| GET | `/admin/users` | Get all users | Yes (ADMIN) |
+| PUT | `/admin/users/:id/role` | Update user role | Yes (ADMIN) |
+| DELETE | `/admin/users/:id` | Delete user | Yes (ADMIN) |
+
+#### **User Endpoints** (`/api/user`)
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/user/profile` | Get user profile | Yes (USER) |
+| PUT | `/user/profile` | Update user profile | Yes (USER) |
+| GET | `/user/orders` | Get user's order history | Yes (USER) |
+
+### Typical User Flows
+
+**Customer Flow:**
 1. Browse menu: `GET /api/public/menu`
-2. Register/Login: `POST /api/auth/signup` or `/api/auth/login`
-3. Add items to cart: `POST /api/cart`
-4. View cart: `GET /api/cart`
-5. Create order from cart: `POST /api/order/from-cart`
-6. View order history: `GET /api/user/orders`
+2. Register: `POST /api/auth/signup`
+3. Login: `POST /api/auth/login`
+4. Add items to cart: `POST /api/cart`
+5. View cart: `GET /api/cart`
+6. Create order from cart: `POST /api/order/from-cart`
+7. View order history: `GET /api/user/orders`
 
-### Admin Journey (NestJS Backend)
+**Admin Flow:**
 1. Login: `POST /api/auth/login` (with admin credentials)
 2. View dashboard: `GET /api/admin/dashboard`
-3. Manage food items: CRUD on `/api/food`
-4. View all orders: `GET /api/order`
+3. Manage menu: CRUD operations on `/api/food`
+4. View orders: `GET /api/order`
 5. Update order status: `PUT /api/order/:id/status`
-6. Manage users: CRUD on `/api/admin/users`
+6. Manage users: CRUD operations on `/api/admin/users`
 
-## 🗂️ Project Structure
+### Complete API Documentation
+
+For detailed API documentation including request/response schemas, validation rules, and error codes, see:
+- [`/backend/API.md`](./backend/API.md) - Complete API reference
+- [`/backend/ARCHITECTURE.md`](./backend/ARCHITECTURE.md) - Architecture details
+
+## 📁 Project Structure
 
 ```
 OrderEase/
-├── nestjs-backend/          # Production-ready NestJS backend
-│   ├── prisma/              # Database schema and migrations
+├── backend/                           # NestJS Backend (PostgreSQL + Prisma)
+│   ├── prisma/
+│   │   ├── schema.prisma             # Database schema definition
+│   │   └── seed.ts                    # Database seeding script
 │   ├── src/
-│   │   ├── auth/            # Authentication module
-│   │   ├── user/            # User management
-│   │   ├── admin/           # Admin functionality
-│   │   ├── food/            # Food/menu management
-│   │   ├── cart/            # Shopping cart
-│   │   ├── order/           # Order processing
-│   │   ├── public/          # Public endpoints
-│   │   ├── gateway/         # API Gateway (logging, errors, rate limiting)
-│   │   ├── database/        # Prisma service
-│   │   └── main.ts          # Application entry point
-│   ├── ARCHITECTURE.md      # Detailed architecture documentation
-│   └── API.md               # Complete API reference
-├── backend/                 # Legacy Express.js backend
-│   ├── config/              # Database configuration
-│   ├── controllers/         # Request handlers
-│   ├── middleware/          # Auth middleware
-│   ├── models/              # Database models
-│   ├── routes/              # API routes
-│   └── server.js            # Entry point
-├── frontend/
-│   ├── public/              # Static files
-│   └── src/
-│       ├── api/             # API configuration
-│       ├── components/      # Reusable components
-│       ├── pages/           # Page components
-│       ├── redux/           # Redux store and slices
-│       └── App.js           # Main app component
-└── README.md
+│   │   ├── admin/                     # Admin module
+│   │   │   ├── admin.controller.ts   # Admin endpoints
+│   │   │   ├── admin.service.ts      # Admin business logic
+│   │   │   └── dto/                   # Data transfer objects
+│   │   ├── auth/                      # Authentication module
+│   │   │   ├── auth.controller.ts    # Auth endpoints (login, signup, refresh)
+│   │   │   ├── auth.service.ts       # Auth business logic
+│   │   │   ├── decorators/           # Custom decorators (@Auth, @CurrentUser, etc.)
+│   │   │   ├── dto/                   # Auth DTOs (LoginDto, SignupDto, etc.)
+│   │   │   ├── guards/                # Auth guards (JWT, Roles)
+│   │   │   └── strategies/            # Passport strategies (JWT strategy)
+│   │   ├── cart/                      # Shopping cart module
+│   │   │   ├── cart.controller.ts    # Cart endpoints
+│   │   │   ├── cart.service.ts       # Cart business logic
+│   │   │   └── cart.dto.ts            # Cart DTOs
+│   │   ├── food/                      # Food/Menu module
+│   │   │   ├── food.controller.ts    # Food CRUD endpoints
+│   │   │   ├── food.service.ts       # Food business logic
+│   │   │   └── food.dto.ts            # Food DTOs
+│   │   ├── order/                     # Order processing module
+│   │   │   ├── order.controller.ts   # Order endpoints
+│   │   │   ├── order.service.ts      # Order business logic
+│   │   │   └── order.dto.ts           # Order DTOs
+│   │   ├── user/                      # User management module
+│   │   │   ├── user.controller.ts    # User endpoints
+│   │   │   ├── user.service.ts       # User business logic
+│   │   │   └── dto/                   # User DTOs
+│   │   ├── public/                    # Public endpoints (no auth)
+│   │   │   ├── public.controller.ts  # Public menu, health check
+│   │   │   └── public.service.ts     # Public business logic
+│   │   ├── gateway/                   # API Gateway layer
+│   │   │   ├── interceptors/         # Logging, transform interceptors
+│   │   │   └── filters/               # Exception filters
+│   │   ├── database/                  # Database module
+│   │   │   └── prisma.service.ts     # Prisma service configuration
+│   │   ├── config/                    # Configuration module
+│   │   ├── constants/                 # Application constants
+│   │   ├── utils/                     # Utility functions
+│   │   ├── app.module.ts             # Root application module
+│   │   └── main.ts                    # Application entry point
+│   ├── test/                          # E2E tests
+│   ├── .env.example                   # Environment variables template
+│   ├── nest-cli.json                  # NestJS CLI configuration
+│   ├── package.json                   # Backend dependencies
+│   ├── tsconfig.json                  # TypeScript configuration
+│   ├── API.md                         # API documentation
+│   ├── ARCHITECTURE.md                # Architecture documentation
+│   └── README.md                      # Backend README
+│
+├── frontend/                          # React Frontend
+│   ├── public/                        # Static assets
+│   │   ├── index.html                # HTML template
+│   │   └── assets/                    # Images, icons
+│   ├── src/
+│   │   ├── api/                       # API configuration
+│   │   │   └── axios.js              # Axios instance setup
+│   │   ├── components/                # Reusable components
+│   │   │   ├── admin/                # Admin components
+│   │   │   │   └── AdminNavbar.jsx  # Admin navigation
+│   │   │   ├── customer/             # Customer components
+│   │   │   │   └── Navbar.jsx       # Customer navigation
+│   │   │   └── ui/                   # Shared UI components
+│   │   ├── pages/                     # Page components (routes)
+│   │   │   ├── admin/                # Admin pages
+│   │   │   │   ├── DashboardPage.jsx        # Dashboard with stats
+│   │   │   │   ├── LoginPage.jsx            # Admin login
+│   │   │   │   ├── MenuManagementPage.jsx   # Menu CRUD
+│   │   │   │   └── OrdersManagementPage.jsx # Order management
+│   │   │   └── customer/             # Customer pages
+│   │   │       ├── MenuPage.jsx             # Browse menu
+│   │   │       ├── CartPage.jsx             # Shopping cart
+│   │   │       ├── CheckoutPage.jsx         # Checkout flow
+│   │   │       └── OrderConfirmationPage.jsx # Order confirmation
+│   │   ├── redux/                     # Redux state management
+│   │   │   ├── slices/               # Redux slices
+│   │   │   │   ├── authSlice.js     # Auth state
+│   │   │   │   ├── cartSlice.js     # Cart state
+│   │   │   │   └── orderSlice.js    # Order state
+│   │   │   └── store.js              # Redux store configuration
+│   │   ├── services/                  # API service layer
+│   │   │   └── api/                  # API modules
+│   │   │       ├── auth.api.js      # Auth API calls
+│   │   │       ├── menu.api.js      # Menu API calls
+│   │   │       ├── orders.api.js    # Orders API calls
+│   │   │       ├── httpClient.js    # HTTP client with interceptors
+│   │   │       └── index.js         # Export all APIs
+│   │   ├── hooks/                     # Custom React hooks
+│   │   ├── utils/                     # Utility functions
+│   │   │   ├── format.js            # Formatting helpers
+│   │   │   └── validation.js        # Validation helpers
+│   │   ├── config/                    # Frontend configuration
+│   │   ├── App.js                     # Main App component
+│   │   ├── App.test.js               # App tests
+│   │   ├── index.js                   # React entry point
+│   │   └── index.css                  # Global styles (Tailwind)
+│   ├── .env.example                   # Environment variables template
+│   ├── package.json                   # Frontend dependencies
+│   ├── tailwind.config.js            # Tailwind CSS configuration
+│   └── README.md                      # Frontend README
+│
+├── .gitignore                         # Git ignore rules
+├── package.json                       # Root package.json (scripts)
+├── README.md                          # This file
+├── CONTRIBUTING.md                    # Contribution guidelines
+├── LICENSE                            # MIT License
+└── QUICK_START.md                     # Quick start guide
 ```
+
+### Key Directories Explained
+
+- **`backend/src/`**: All backend source code organized by feature modules
+- **`backend/prisma/`**: Database schema and migration files
+- **`frontend/src/pages/`**: Top-level route components
+- **`frontend/src/components/`**: Reusable UI components
+- **`frontend/src/redux/`**: Global state management
+- **`frontend/src/services/`**: API service layer for backend communication
 
 ## 🎨 Database Schema (NestJS Backend)
 
@@ -419,7 +864,236 @@ docker run -p 3000:3000 \
 
 ### Database
 - **PostgreSQL**: Use Railway, Supabase, or managed PostgreSQL
-- **MongoDB** (Legacy backend): Use MongoDB Atlas
+
+## 🔧 Troubleshooting
+
+### Backend Issues
+
+#### Problem: Cannot connect to PostgreSQL
+
+**Symptoms:**
+```
+Error: P1001: Can't reach database server at `localhost:5432`
+```
+
+**Solutions:**
+
+1. **Check if PostgreSQL is running:**
+   ```bash
+   # On Windows
+   # Check Services for PostgreSQL
+   
+   # On macOS
+   brew services list
+   brew services start postgresql
+   
+   # On Linux
+   sudo systemctl status postgresql
+   sudo systemctl start postgresql
+   ```
+
+2. **Verify DATABASE_URL in `.env`:**
+   ```env
+   # Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+   DATABASE_URL="postgresql://postgres:password@localhost:5432/orderease"
+   ```
+
+3. **Test connection manually:**
+   ```bash
+   psql -U postgres -d orderease
+   ```
+
+#### Problem: Port 3000 already in use
+
+**Symptoms:**
+```
+Error: listen EADDRINUSE: address already in use :::3000
+```
+
+**Solutions:**
+
+1. **Change the port in backend `.env`:**
+   ```env
+   PORT=3001
+   ```
+
+2. **Update frontend `.env` to match:**
+   ```env
+   REACT_APP_API_URL=http://localhost:3001/api
+   ```
+
+3. **Or kill the process using port 3000:**
+   ```bash
+   # On macOS/Linux
+   lsof -ti:3000 | xargs kill -9
+   
+   # On Windows
+   netstat -ano | findstr :3000
+   taskkill /PID <PID> /F
+   ```
+
+#### Problem: Prisma migration fails
+
+**Symptoms:**
+```
+Error: Migration failed: ...
+```
+
+**Solutions:**
+
+1. **Reset the database (WARNING: Deletes all data):**
+   ```bash
+   cd backend
+   npx prisma migrate reset
+   npm run prisma:seed
+   ```
+
+2. **Generate Prisma Client again:**
+   ```bash
+   npm run prisma:generate
+   ```
+
+3. **Check DATABASE_URL is correct in `.env`**
+
+#### Problem: JWT token errors
+
+**Symptoms:**
+```
+401 Unauthorized
+"message": "Invalid token"
+```
+
+**Solutions:**
+
+1. **Check JWT_SECRET is set in backend `.env`**
+2. **Clear browser local storage and login again**
+3. **Ensure token is not expired (default: 7 days)**
+
+### Frontend Issues
+
+#### Problem: Cannot connect to API
+
+**Symptoms:**
+```
+Error: Network Error
+or
+CORS error in browser console
+```
+
+**Solutions:**
+
+1. **Verify backend is running on correct port:**
+   ```bash
+   # Check backend console for "Server is running on: http://localhost:3000"
+   ```
+
+2. **Check frontend `.env` has correct API URL:**
+   ```env
+   REACT_APP_API_URL=http://localhost:3000/api
+   ```
+
+3. **Verify CORS_ORIGIN in backend `.env` matches frontend URL:**
+   ```env
+   CORS_ORIGIN=http://localhost:3001
+   ```
+
+4. **Restart both servers after changing `.env` files**
+
+#### Problem: npm install fails
+
+**Symptoms:**
+```
+npm ERR! code ERESOLVE
+npm ERR! ERESOLVE unable to resolve dependency tree
+```
+
+**Solutions:**
+
+1. **Clear npm cache:**
+   ```bash
+   npm cache clean --force
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
+
+2. **Use legacy peer deps (if needed):**
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+
+3. **Check Node.js version:**
+   ```bash
+   node --version  # Should be v18.x or higher
+   ```
+
+#### Problem: Tailwind styles not working
+
+**Symptoms:**
+- UI looks unstyled
+- Tailwind classes not applying
+
+**Solutions:**
+
+1. **Ensure Tailwind is configured in `tailwind.config.js`**
+2. **Check `index.css` imports Tailwind:**
+   ```css
+   @tailwind base;
+   @tailwind components;
+   @tailwind utilities;
+   ```
+3. **Restart the frontend development server**
+
+### Database Issues
+
+#### Problem: Database doesn't have sample data
+
+**Solutions:**
+
+```bash
+cd backend
+npm run prisma:seed
+```
+
+#### Problem: Can't access Prisma Studio
+
+**Solutions:**
+
+```bash
+cd backend
+npm run prisma:studio
+# Opens at http://localhost:5555
+```
+
+### Common Setup Mistakes
+
+1. **Forgot to create `.env` files**
+   - Copy from `.env.example` in both backend and frontend
+
+2. **Wrong API URL in frontend `.env`**
+   - Must match backend PORT
+
+3. **Forgot to run database migrations**
+   - Run `npm run prisma:migrate` in backend
+
+4. **Forgot to seed database**
+   - Run `npm run prisma:seed` in backend
+
+5. **Using wrong credentials to login**
+   - Admin: `admin@orderease.com` / `admin123`
+   - User: `user@orderease.com` / `user123`
+
+### Getting Help
+
+If you're still experiencing issues:
+
+1. **Check the console logs** (both backend terminal and browser console)
+2. **Review the error messages** carefully
+3. **Ensure all prerequisites are installed**
+4. **Try the complete setup from scratch**
+5. **Open an issue on GitHub** with:
+   - Error message
+   - Steps to reproduce
+   - Your environment (OS, Node version, etc.)
 
 ## 📝 Future Enhancements
 
@@ -431,28 +1105,40 @@ docker run -p 3000:3000 \
 - [ ] Multiple restaurant support
 - [ ] Analytics and reporting
 
-## 👨‍💻 About TechSign
+## 🤝 Contributing
 
-This project is part of TechSign's portfolio, demonstrating full-stack development skills including:
-- RESTful API design
-- Database modeling
-- State management
-- Authentication & authorization
-- Responsive UI design
-- Modern JavaScript (ES6+)
+Contributions, issues, and feature requests are welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+**Before contributing:**
+1. Read the [CONTRIBUTING.md](./CONTRIBUTING.md) guide
+2. Check existing issues and pull requests
+3. Follow the code style and commit conventions
+4. Test your changes thoroughly
 
 ## 📄 License
 
-This project is open source and available under the MIT License.
+This project is open source and available under the [MIT License](./LICENSE).
 
-## 🤝 Contributing
+## 👨‍💻 About
 
-Contributions, issues, and feature requests are welcome!
+This project is part of TechSign's portfolio, demonstrating modern full-stack development skills:
+- RESTful API design and implementation
+- Database modeling and optimization
+- State management with Redux
+- Authentication & authorization (JWT + RBAC)
+- Responsive UI/UX design
+- Modern TypeScript and React patterns
+- Production-ready architecture
 
-## 📧 Contact
+## 📧 Support
 
-For any queries or collaboration opportunities, feel free to reach out!
+For questions, issues, or collaboration opportunities:
+- Open an issue on [GitHub](https://github.com/TECH-SIGN/OrderEase/issues)
+- Check the [Troubleshooting](#-troubleshooting) section
+- Review the [QUICK_START.md](./QUICK_START.md) guide
 
 ---
 
-⭐ If you found this project helpful, please consider giving it a star!
+⭐ **If you found this project helpful, please consider giving it a star!**
+
+Made with ❤️ by TechSign
