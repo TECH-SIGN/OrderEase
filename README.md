@@ -262,13 +262,14 @@ Edit the `.env` file with your configuration:
 ```env
 # Database Connection
 # For local PostgreSQL:
-DATABASE_URL="postgresql://postgres:password@localhost:5432/orderease?schema=public"
+DATABASE_URL="postgresql://postgres:your_password_here@localhost:5432/orderease?schema=public"
 # For cloud PostgreSQL, use the connection string provided by your service
 
-# JWT Secrets (IMPORTANT: Change these in production!)
-JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+# JWT Secrets (IMPORTANT: Generate strong, random secrets!)
+# Generate with: openssl rand -base64 32
+JWT_SECRET=your_super_secret_jwt_key_here_change_this
 JWT_EXPIRES_IN=7d
-JWT_REFRESH_SECRET=your_super_secret_refresh_key_change_this_in_production
+JWT_REFRESH_SECRET=your_super_secret_refresh_key_here_change_this
 JWT_REFRESH_EXPIRES_IN=30d
 
 # Application Settings
@@ -282,7 +283,7 @@ CORS_ORIGIN=http://localhost:3001
 
 **Configuration Notes:**
 
-- **DATABASE_URL**: Replace `postgres:password` with your PostgreSQL username and password
+- **DATABASE_URL**: Replace `your_password_here` with your PostgreSQL password
 - **JWT_SECRET**: Use a strong, random string for production (e.g., generate with `openssl rand -base64 32`)
 - **PORT**: Backend will run on this port (default: 3000)
 - **CORS_ORIGIN**: Frontend URL for CORS configuration

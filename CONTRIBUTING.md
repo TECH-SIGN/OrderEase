@@ -215,7 +215,7 @@ async findFoodById(id: string): Promise<Food> {
   });
   
   if (!food) {
-    throw new NotFoundException(`Food with ID ${id} not found`);
+    throw new NotFoundException('Food item not found');
   }
   
   return food;
