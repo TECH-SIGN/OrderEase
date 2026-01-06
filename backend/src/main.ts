@@ -75,12 +75,21 @@ async function bootstrap() {
   logger.log(`API Gateway active with structured logging and error handling`);
 }
 
+/**
+ * Global error handlers for process-level errors
+ * These use direct console output instead of AppLoggerService because:
+ * - They may be triggered before the app is fully initialized
+ * - The app/DI system may be in a broken state when these errors occur
+ * - We need guaranteed error logging even if the logging infrastructure fails
+ */
+
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason: unknown) => {
   const errorMessage =
     reason instanceof Error ? reason.message : String(reason);
   const errorStack = reason instanceof Error ? reason.stack : undefined;
 
+  // Using console.error directly as app may not be initialized
   console.error(
     JSON.stringify({
       timestamp: new Date().toISOString(),
@@ -95,6 +104,7 @@ process.on('unhandledRejection', (reason: unknown) => {
   );
 
   // Exit process in production, keep running in development for debugging
+  // Direct env access is intentional as ConfigService may not be available
   if (process.env.NODE_ENV === 'production') {
     process.exit(1);
   }
@@ -102,6 +112,7 @@ process.on('unhandledRejection', (reason: unknown) => {
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (error: Error) => {
+  // Using console.error directly as app may not be initialized
   console.error(
     JSON.stringify({
       timestamp: new Date().toISOString(),
@@ -121,6 +132,7 @@ process.on('uncaughtException', (error: Error) => {
 });
 
 bootstrap().catch((err: Error) => {
+  // Using console.error directly as app bootstrap failed
   console.error(
     JSON.stringify({
       timestamp: new Date().toISOString(),
