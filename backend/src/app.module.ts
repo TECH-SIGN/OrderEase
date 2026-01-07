@@ -10,6 +10,7 @@ import { PublicModule } from './public';
 import { FoodModule } from './food';
 import { OrderModule } from './order';
 import { CartModule } from './cart';
+import { HealthModule } from './health';
 import { appConfig, databaseConfig, jwtConfig } from './config';
 import { AppLoggerService, RequestContextMiddleware } from './common';
 
@@ -30,6 +31,7 @@ import { AppLoggerService, RequestContextMiddleware } from './common';
     FoodModule,
     CartModule,
     OrderModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppLoggerService],
