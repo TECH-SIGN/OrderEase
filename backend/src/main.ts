@@ -8,8 +8,12 @@ import {
   GlobalExceptionFilter,
   LoggingInterceptor,
 } from './common';
+import { validateEnv } from './config';
 
 async function bootstrap() {
+  // Validate environment variables before starting the application
+  validateEnv();
+
   const app = await NestFactory.create(AppModule);
 
   // Get config service
