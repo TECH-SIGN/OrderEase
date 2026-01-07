@@ -8,7 +8,7 @@ import { hashPassword } from '../utils';
 
 let userCounter = 0;
 let foodCounter = 0;
-let orderCounter = 0;
+// let orderCounter = 0;
 
 /**
  * Reset counters (useful between tests)
@@ -16,7 +16,7 @@ let orderCounter = 0;
 export function resetFactoryCounters() {
   userCounter = 0;
   foodCounter = 0;
-  orderCounter = 0;
+  // orderCounter = 0;
 }
 
 /**
@@ -168,7 +168,7 @@ export async function createTestFoods(
     price: number;
   }>,
 ) {
-  const foods = [];
+  const foods: Awaited<ReturnType<typeof createTestFood>>[] = [];
   for (let i = 0; i < count; i++) {
     const food = await createTestFood(prisma, overrides);
     foods.push(food);
