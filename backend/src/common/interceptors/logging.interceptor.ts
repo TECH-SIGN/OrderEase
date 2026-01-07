@@ -50,7 +50,8 @@ function deepSanitize(obj: unknown): unknown {
           key.toLowerCase().includes(field.toLowerCase()),
       );
 
-      if (isSensitive && typeof value === 'string') {
+      if (isSensitive) {
+        // Sanitize sensitive fields regardless of their type
         sanitized[key] = '***';
       } else if (typeof value === 'object' && value !== null) {
         sanitized[key] = deepSanitize(value);

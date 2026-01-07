@@ -442,4 +442,38 @@ describe('LoggingInterceptor', () => {
       done();
     });
   });
+
+  it('should sanitize sensitive fields with non-string values', (done) => {
+    const mockRequest: Partial<RequestWithContext> = {
+      method: 'POST',
+      url: '/api/config',
+      ip: '127.0.0.1',
+      headers: {},
+      body: {
+        password: 12345, // number
+        token: true, // boolean
+        apiKey: { nested: 'value' }, // object
+        normalField: 'visible',
+      },
+      requestId: 'test-request-id',
+    };
+
+    const context = createMockExecutionContext(mockRequest);
+    const next = createMockCallHandler();
+
+    interceptor.intercept(context, next).subscribe(() => {
+      const logs = consoleDebugSpy.mock.calls.map((call) =>
+        JSON.parse(call[0]),
+      );
+      const bodyLog = logs.find(
+        (log) => log.message === 'Request Body' && log.metadata?.body,
+      );
+      expect(bodyLog).toBeDefined();
+      expect(bodyLog.metadata.body.password).toBe('***');
+      expect(bodyLog.metadata.body.token).toBe('***');
+      expect(bodyLog.metadata.body.apiKey).toBe('***');
+      expect(bodyLog.metadata.body.normalField).toBe('visible');
+      done();
+    });
+  });
 });

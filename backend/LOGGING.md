@@ -135,16 +135,19 @@ The interceptor automatically sanitizes the following field names (case-insensit
 - `credential`
 - `credentials`
 
+**Important:** Sensitive fields are sanitized regardless of their value type (string, number, boolean, object, array, etc.).
+
 **Example:**
 ```typescript
 // Request body:
 {
   user: {
     email: "test@test.com",
-    password: "secret123"
+    password: "secret123"  // string
   },
   config: {
-    apiKey: "sk-12345"
+    apiKey: 12345,  // number
+    token: true  // boolean
   }
 }
 
@@ -155,7 +158,8 @@ The interceptor automatically sanitizes the following field names (case-insensit
     password: "***"
   },
   config: {
-    apiKey: "***"
+    apiKey: "***",
+    token: "***"
   }
 }
 ```
