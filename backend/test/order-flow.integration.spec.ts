@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/database';
 import {
@@ -13,9 +13,9 @@ interface TestFood {
   id: string;
   name: string;
   price: number;
-  description?: string;
+  description: string | null;
   category: string;
-  image?: string;
+  image: string | null;
   isAvailable: boolean;
 }
 
