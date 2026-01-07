@@ -8,6 +8,7 @@ import { Cart, CartItemProps } from '../domain/cart.entity';
 import {
   ICartRepository,
   CartWithDetails,
+  CartItemData,
 } from './cart.repository.interface';
 
 @Injectable()
@@ -74,6 +75,98 @@ export class PrismaCartRepository implements ICartRepository {
     return { cart, foodDetails };
   }
 
+  async getOrCreate(userId: string): Promise<Cart> {
+    let prismaCart = await this.prisma.cart.findUnique({
+      where: { userId },
+      include: {
+        cartItems: true,
+      },
+    });
+
+    if (!prismaCart) {
+      prismaCart = await this.prisma.cart.create({
+        data: { userId },
+        include: {
+          cartItems: true,
+        },
+      });
+    }
+
+    return this.toDomain(prismaCart);
+  }
+
+  async addOrUpdateItem(
+    userId: string,
+    foodId: string,
+    quantity: number,
+  ): Promise<void> {
+    const cart = await this.prisma.cart.findUnique({
+      where: { userId },
+    });
+
+    if (!cart) {
+      const newCart = await this.prisma.cart.create({
+        data: { userId },
+      });
+
+      await this.prisma.cartItem.create({
+        data: {
+          cartId: newCart.id,
+          foodId,
+          quantity,
+        },
+      });
+      return;
+    }
+
+    const existingItem = await this.prisma.cartItem.findUnique({
+      where: {
+        cartId_foodId: {
+          cartId: cart.id,
+          foodId,
+        },
+      },
+    });
+
+    if (existingItem) {
+      await this.prisma.cartItem.update({
+        where: { id: existingItem.id },
+        data: { quantity: existingItem.quantity + quantity },
+      });
+    } else {
+      await this.prisma.cartItem.create({
+        data: {
+          cartId: cart.id,
+          foodId,
+          quantity,
+        },
+      });
+    }
+  }
+
+  async updateItemQuantity(
+    userId: string,
+    itemId: string,
+    quantity: number,
+  ): Promise<void> {
+    if (quantity === 0) {
+      await this.prisma.cartItem.delete({
+        where: { id: itemId },
+      });
+    } else {
+      await this.prisma.cartItem.update({
+        where: { id: itemId },
+        data: { quantity },
+      });
+    }
+  }
+
+  async removeItem(userId: string, itemId: string): Promise<void> {
+    await this.prisma.cartItem.delete({
+      where: { id: itemId },
+    });
+  }
+
   async clearCart(userId: string): Promise<void> {
     const cart = await this.prisma.cart.findUnique({
       where: { userId },
@@ -84,6 +177,22 @@ export class PrismaCartRepository implements ICartRepository {
         where: { cartId: cart.id },
       });
     }
+  }
+
+  async getCartItem(itemId: string): Promise<CartItemData | null> {
+    const item = await this.prisma.cartItem.findUnique({
+      where: { id: itemId },
+    });
+
+    if (!item) {
+      return null;
+    }
+
+    return {
+      id: item.id,
+      foodId: item.foodId,
+      quantity: item.quantity,
+    };
   }
 
   private toDomain(
