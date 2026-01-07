@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { AppLoggerService, GlobalExceptionFilter, LoggingInterceptor } from './common';
-import { LoggingInterceptor, GlobalExceptionFilter } from './gateway';
 import { validateEnv } from './config';
 
 
