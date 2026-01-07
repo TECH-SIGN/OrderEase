@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { PrismaService } from '../database';
-import { createMockPrismaService } from '../test-utils';
 import { MESSAGES } from '../constants';
-import { OrderStatus } from './order.dto';
+import { OrderStatus } from './dto/order.dto';
+import { ORDER_REPOSITORY } from './infra/order.repository.interface';
+import { FOOD_REPOSITORY } from '../food/infra/food.repository.interface';
+import { CART_REPOSITORY } from '../cart/infra/cart.repository.interface';
 
 describe('OrderService', () => {
   let service: OrderService;
