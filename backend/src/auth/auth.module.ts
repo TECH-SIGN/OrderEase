@@ -6,6 +6,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies';
 import { parseJwtExpiration } from '../utils';
+import { USER_REPOSITORY } from '../user/infra/user.repository.interface';
+import { PrismaUserRepository } from '../user/infra/prisma-user.repository';
 
 @Module({
   imports: [
@@ -29,7 +31,14 @@ import { parseJwtExpiration } from '../utils';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    {
+      provide: USER_REPOSITORY,
+      useClass: PrismaUserRepository,
+    },
+  ],
   exports: [AuthService, JwtStrategy, PassportModule, JwtModule],
 })
 export class AuthModule {}
