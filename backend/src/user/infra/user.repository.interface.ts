@@ -4,6 +4,11 @@
 
 import { User, SafeUser } from '../domain/user.entity';
 
+export interface UserUpdateData {
+  name?: string;
+  email?: string;
+}
+
 export interface IUserRepository {
   /**
    * Create a new user
@@ -28,7 +33,7 @@ export interface IUserRepository {
   /**
    * Update user
    */
-  update(id: string, data: Partial<User>): Promise<User>;
+  update(id: string, data: UserUpdateData): Promise<User>;
 
   /**
    * Update user password

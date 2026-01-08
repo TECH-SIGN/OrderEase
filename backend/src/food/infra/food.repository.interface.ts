@@ -4,6 +4,15 @@
 
 import { Food } from '../domain/food.entity';
 
+export interface FoodUpdateData {
+  name?: string;
+  description?: string;
+  price?: number;
+  category?: string;
+  image?: string;
+  isAvailable?: boolean;
+}
+
 export interface IFoodRepository {
   /**
    * Create a new food item
@@ -33,7 +42,7 @@ export interface IFoodRepository {
   /**
    * Update food item
    */
-  update(id: string, data: Partial<Food>): Promise<Food>;
+  update(id: string, data: FoodUpdateData): Promise<Food>;
 
   /**
    * Delete food item

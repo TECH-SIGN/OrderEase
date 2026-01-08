@@ -5,7 +5,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database';
 import { Food } from '../domain/food.entity';
-import { IFoodRepository } from './food.repository.interface';
+import { IFoodRepository, FoodUpdateData } from './food.repository.interface';
 
 @Injectable()
 export class PrismaFoodRepository implements IFoodRepository {
@@ -79,7 +79,7 @@ export class PrismaFoodRepository implements IFoodRepository {
     return prismaFoods.map((pf) => this.toDomain(pf));
   }
 
-  async update(id: string, data: Partial<Food>): Promise<Food> {
+  async update(id: string, data: FoodUpdateData): Promise<Food> {
     const updateData: Record<string, unknown> = {};
 
     if (data.name !== undefined) updateData.name = data.name;

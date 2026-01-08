@@ -5,7 +5,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database';
 import { User, UserRole, SafeUser } from '../domain/user.entity';
-import { IUserRepository } from './user.repository.interface';
+import { IUserRepository, UserUpdateData } from './user.repository.interface';
 import { Role as PrismaRole } from '@prisma/client';
 
 @Injectable()
@@ -69,7 +69,7 @@ export class PrismaUserRepository implements IUserRepository {
     return { users, total };
   }
 
-  async update(id: string, data: Partial<User>): Promise<User> {
+  async update(id: string, data: UserUpdateData): Promise<User> {
     const updateData: Record<string, unknown> = {};
 
     if (data.name !== undefined) updateData.name = data.name;

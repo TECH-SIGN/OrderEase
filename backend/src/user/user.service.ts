@@ -55,7 +55,7 @@ export class UserService {
       updateData.name = updateProfileDto.name;
     }
 
-    const updatedUser = await this.userRepository.update(userId, updateData as Partial<User>);
+    const updatedUser = await this.userRepository.update(userId, updateData);
 
     return updatedUser.toSafeUser();
   }

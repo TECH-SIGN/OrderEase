@@ -76,7 +76,7 @@ export class FoodService {
     if (updateFoodDto.isAvailable !== undefined)
       updateData.isAvailable = updateFoodDto.isAvailable;
 
-    return this.foodRepository.update(id, updateData as Partial<Food>);
+    return this.foodRepository.update(id, updateData);
   }
 
   /**

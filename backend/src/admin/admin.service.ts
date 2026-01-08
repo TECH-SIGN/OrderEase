@@ -117,7 +117,7 @@ export class AdminService {
       updateData.email = updateUserDto.email;
     }
 
-    const updatedUser = await this.userRepository.update(id, updateData as Partial<User>);
+    const updatedUser = await this.userRepository.update(id, updateData);
 
     return updatedUser.toSafeUser();
   }
