@@ -10,7 +10,7 @@ const foodApi = {
   /**
    * Get all food items (Admin only)
    * @param {Object} params - Query parameters
-   * @param {boolean} params.available - Filter by availability
+   * @param {boolean} params.includeUnavailable - Whether to include unavailable items
    * @param {string} params.category - Filter by category
    * @returns {Promise} Array of food items
    */

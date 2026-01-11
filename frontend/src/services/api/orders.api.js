@@ -27,7 +27,7 @@ const ordersApi = {
   /**
    * Create order from cart
    * @param {Object} orderData - Order data from cart
-   * @param {boolean} orderData.clearCart - Whether to clear the cart after creating order (optional, default: false)
+   * @param {boolean} orderData.clearCart - Whether to clear the cart after creating order (optional, default: true)
    * @returns {Promise} Created order
    */
   createOrderFromCart: async (orderData) => {

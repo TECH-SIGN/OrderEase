@@ -18,8 +18,8 @@ const authApi = {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
     
     // Store tokens if present
-    if (response.data.token) {
-      TokenManager.setToken(response.data.token);
+    if (response.data.accessToken) {
+      TokenManager.setToken(response.data.accessToken);
     }
     if (response.data.refreshToken) {
       TokenManager.setRefreshToken(response.data.refreshToken);
@@ -41,8 +41,8 @@ const authApi = {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.REGISTER, userData);
     
     // Store tokens if present
-    if (response.data.token) {
-      TokenManager.setToken(response.data.token);
+    if (response.data.accessToken) {
+      TokenManager.setToken(response.data.accessToken);
     }
     if (response.data.refreshToken) {
       TokenManager.setRefreshToken(response.data.refreshToken);
@@ -68,8 +68,8 @@ const authApi = {
   refreshToken: async (refreshToken) => {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.REFRESH, { refreshToken });
     
-    if (response.data.token) {
-      TokenManager.setToken(response.data.token);
+    if (response.data.accessToken) {
+      TokenManager.setToken(response.data.accessToken);
     }
     if (response.data.refreshToken) {
       TokenManager.setRefreshToken(response.data.refreshToken);
