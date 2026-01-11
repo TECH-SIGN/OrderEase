@@ -4,6 +4,7 @@
  */
 
 import { Role } from './common.types';
+import { Order } from './order.types';
 
 /**
  * UpdateProfileDto from backend/src/user/dto/user.dto.ts
@@ -42,23 +43,4 @@ export interface PaginatedUserOrders {
   total: number;
   page: number;
   limit: number;
-}
-
-/**
- * Order interface (simplified for user orders list)
- * Full Order type is in order.types.ts
- */
-interface Order {
-  id: string;
-  userId: string;
-  items: OrderItem[];
-  status: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-interface OrderItem {
-  foodId: string;
-  quantity: number;
-  price: number;
 }

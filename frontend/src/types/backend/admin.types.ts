@@ -5,6 +5,7 @@
 
 import { Role } from './common.types';
 import { SafeUser } from './user.types';
+import { Order } from './order.types';
 
 /**
  * UpdateUserRoleDto from backend/src/admin/dto/admin.dto.ts
@@ -33,7 +34,7 @@ export interface AdminDashboardData {
   totalUsers?: number;
   totalOrders?: number;
   totalRevenue?: number;
-  recentOrders?: unknown[];
+  recentOrders?: Order[];
 }
 
 /**
