@@ -65,6 +65,8 @@ model Order {
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   orderItems OrderItem[]
 
+  @@index([userId])
+  @@index([status])
   @@map("orders")
 }
 
