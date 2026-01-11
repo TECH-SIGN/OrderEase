@@ -15,12 +15,8 @@ const foodApi = {
    * @returns {Promise} Array of food items
    */
   getAllFoodItems: async (params = {}) => {
-    try {
-      const response = await httpClient.get(API_ENDPOINTS.FOOD.LIST, { params });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.get(API_ENDPOINTS.FOOD.LIST, { params });
+    return response.data;
   },
 
   /**
@@ -29,12 +25,8 @@ const foodApi = {
    * @returns {Promise} Food item data
    */
   getFoodItemById: async (id) => {
-    try {
-      const response = await httpClient.get(API_ENDPOINTS.FOOD.BY_ID(id));
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.get(API_ENDPOINTS.FOOD.BY_ID(id));
+    return response.data;
   },
 
   /**
@@ -49,12 +41,8 @@ const foodApi = {
    * @returns {Promise} Created food item
    */
   createFoodItem: async (foodItemData) => {
-    try {
-      const response = await httpClient.post(API_ENDPOINTS.FOOD.CREATE, foodItemData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.post(API_ENDPOINTS.FOOD.CREATE, foodItemData);
+    return response.data;
   },
 
   /**
@@ -64,12 +52,8 @@ const foodApi = {
    * @returns {Promise} Updated food item
    */
   updateFoodItem: async (id, foodItemData) => {
-    try {
-      const response = await httpClient.put(API_ENDPOINTS.FOOD.UPDATE(id), foodItemData);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.put(API_ENDPOINTS.FOOD.UPDATE(id), foodItemData);
+    return response.data;
   },
 
   /**
@@ -78,12 +62,8 @@ const foodApi = {
    * @returns {Promise}
    */
   deleteFoodItem: async (id) => {
-    try {
-      const response = await httpClient.delete(API_ENDPOINTS.FOOD.DELETE(id));
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.delete(API_ENDPOINTS.FOOD.DELETE(id));
+    return response.data;
   },
 
   /**
@@ -92,14 +72,10 @@ const foodApi = {
    * @returns {Promise} Array of food items
    */
   getFoodItemsByCategory: async (category) => {
-    try {
-      const response = await httpClient.get(API_ENDPOINTS.FOOD.LIST, {
-        params: { category },
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.get(API_ENDPOINTS.FOOD.LIST, {
+      params: { category },
+    });
+    return response.data;
   },
 };
 

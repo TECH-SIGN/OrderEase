@@ -14,12 +14,8 @@ const menuApi = {
    * @returns {Promise} Array of menu items
    */
   getMenuItems: async (params = {}) => {
-    try {
-      const response = await httpClient.get(API_ENDPOINTS.MENU.LIST, { params });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.get(API_ENDPOINTS.MENU.LIST, { params });
+    return response.data;
   },
 
   /**
@@ -28,12 +24,8 @@ const menuApi = {
    * @returns {Promise} Menu item data
    */
   getMenuItemById: async (id) => {
-    try {
-      const response = await httpClient.get(API_ENDPOINTS.MENU.BY_ID(id));
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.get(API_ENDPOINTS.MENU.BY_ID(id));
+    return response.data;
   },
 
   /**
@@ -42,14 +34,10 @@ const menuApi = {
    * @returns {Promise} Array of menu items
    */
   getMenuItemsByCategory: async (category) => {
-    try {
-      const response = await httpClient.get(API_ENDPOINTS.MENU.LIST, {
-        params: { category },
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await httpClient.get(API_ENDPOINTS.MENU.LIST, {
+      params: { category },
+    });
+    return response.data;
   },
 };
 
