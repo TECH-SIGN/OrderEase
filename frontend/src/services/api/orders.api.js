@@ -15,7 +15,8 @@ const ordersApi = {
    * @param {Array} orderData.items - Order items
    * @param {number} orderData.totalPrice - Total price
    * @param {string} orderData.orderType - Order type (dine-in/delivery)
-   * @param {string} orderData.address - Delivery address (optional)
+   * @param {string} orderData.tableNumber - Table number (optional)
+   * @param {string} orderData.deliveryAddress - Delivery address (optional)
    * @returns {Promise} Created order
    */
   createOrder: async (orderData) => {
@@ -28,7 +29,21 @@ const ordersApi = {
   },
 
   /**
-   * Get all orders (Admin only)
+   * Create order from cart
+   * @param {Object} orderData - Order data from cart
+   * @returns {Promise} Created order
+   */
+  createOrderFromCart: async (orderData) => {
+    try {
+      const response = await httpClient.post(API_ENDPOINTS.ORDERS.CREATE_FROM_CART, orderData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Get all orders
    * @param {Object} params - Query parameters
    * @param {string} params.status - Filter by status
    * @param {string} params.orderType - Filter by order type
@@ -58,7 +73,7 @@ const ordersApi = {
   },
 
   /**
-   * Update order status (Admin only)
+   * Update order status
    * @param {string} id - Order ID
    * @param {string} status - New status
    * @returns {Promise} Updated order
@@ -66,6 +81,20 @@ const ordersApi = {
   updateOrderStatus: async (id, status) => {
     try {
       const response = await httpClient.put(API_ENDPOINTS.ORDERS.UPDATE_STATUS(id), { status });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  /**
+   * Delete order
+   * @param {string} id - Order ID
+   * @returns {Promise}
+   */
+  deleteOrder: async (id) => {
+    try {
+      const response = await httpClient.delete(API_ENDPOINTS.ORDERS.DELETE(id));
       return response.data;
     } catch (error) {
       throw error;
