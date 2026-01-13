@@ -9,3 +9,8 @@ export { default as useDebounce } from './useDebounce';
 export { default as useCheckout } from './useCheckout';
 export { default as useMenuManagement } from './useMenuManagement';
 export { default as useOrdersManagement } from './useOrdersManagement';
+export { default as useOrderConfirmation } from './useOrderConfirmation';
+export { default as useDashboard } from './useDashboard';
+export { default as useMenu } from './useMenu';
+export { default as useCart } from './useCart';
+export { default as useLogin } from './useLogin';
