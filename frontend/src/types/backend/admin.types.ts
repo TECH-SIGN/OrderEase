@@ -39,10 +39,14 @@ export interface AdminDashboardData {
 
 /**
  * Paginated users response
+ * Mirrors backend pagination structure
  */
 export interface PaginatedUsers {
   users: SafeUser[];
-  total: number;
-  page: number;
-  limit: number;
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
