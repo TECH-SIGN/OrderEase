@@ -28,7 +28,7 @@ export interface SignUpDto {
  */
 export interface AuthResponseData {
   accessToken: string;
-  refreshToken?: string;
+  refreshToken: string;
   user: {
     id: string;
     email: string;
