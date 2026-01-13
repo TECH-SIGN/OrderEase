@@ -157,7 +157,7 @@ function LoginComponent() {
       
       if (response.success && response.data) {
         // response.data is typed as AuthResponseData
-        const { accessToken, user } = response.data;
+        const { user } = response.data;
         console.log('Logged in user:', user.email);
       }
     } catch (error) {
