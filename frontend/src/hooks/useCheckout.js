@@ -3,7 +3,7 @@
  * Custom hook for checkout operations and form management
  */
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ordersApi } from '../services/api';
@@ -28,6 +28,13 @@ const useCheckout = () => {
   const totalPrice = useMemo(() => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   }, [items]);
+
+  // Handle redirect if cart is empty - moved into hook as effect
+  useEffect(() => {
+    if (items.length === 0) {
+      navigate('/cart');
+    }
+  }, [items.length, navigate]);
 
   const handleChange = useCallback((e) => {
     setFormData((prev) => ({
@@ -66,12 +73,6 @@ const useCheckout = () => {
     }
   }, [formData, items, totalPrice, dispatch, navigate]);
 
-  const redirectIfEmptyCart = useCallback(() => {
-    if (items.length === 0) {
-      navigate('/cart');
-    }
-  }, [items.length, navigate]);
-
   return {
     formData,
     loading,
@@ -80,7 +81,6 @@ const useCheckout = () => {
     items,
     handleChange,
     placeOrder,
-    redirectIfEmptyCart,
   };
 };
 

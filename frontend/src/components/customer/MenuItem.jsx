@@ -1,8 +1,8 @@
 import React from 'react';
-import { useMenuItem } from '../../hooks';
+import { useAddToCart } from '../../hooks';
 
 const MenuItem = ({ item }) => {
-  const { handleAddToCart } = useMenuItem(item);
+  const { handleAddToCart } = useAddToCart(item);
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">

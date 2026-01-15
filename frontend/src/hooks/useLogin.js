@@ -8,12 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../redux/slices/authSlice';
 import { isValidEmail, validateRequired } from '../utils';
+import { INITIAL_LOGIN_FORM_DATA } from '../constants';
 
 const useLogin = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [formData, setFormData] = useState(INITIAL_LOGIN_FORM_DATA);
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,7 +46,7 @@ const useLogin = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [formData.email, formData.password, setErrors]);
+  }, [formData.email, formData.password]);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();

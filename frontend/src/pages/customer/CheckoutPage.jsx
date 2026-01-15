@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useCheckout } from '../../hooks';
 import Navbar from '../../components/customer/Navbar';
 
@@ -11,14 +11,9 @@ const CheckoutPage = () => {
     items,
     handleChange,
     placeOrder,
-    redirectIfEmptyCart,
   } = useCheckout();
 
-  useEffect(() => {
-    redirectIfEmptyCart();
-  }, [redirectIfEmptyCart]);
-
-  // Render nothing while cart is empty (redirect is in progress)
+  // Render nothing while cart is empty (redirect happens in hook)
   if (items.length === 0) {
     return null;
   }

@@ -3,21 +3,43 @@
  * Custom hook for order confirmation page
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ordersApi } from '../services/api';
+import { getOrderStatusColor } from '../utils';
 
 const useOrderConfirmation = (orderId) => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const fetchOrder = useCallback(async () => {
+    if (!orderId) {
+      console.error('useOrderConfirmation: orderId is required');
+      if (isMounted.current) {
+        setError('Order ID is missing');
+        setLoading(false);
+      }
+      return;
+    }
+
     try {
       const data = await ordersApi.getOrderById(orderId);
+      if (!isMounted.current) return;
       setOrder(data);
       setLoading(false);
+      setError('');
     } catch (error) {
       console.error('Error fetching order:', error);
+      if (!isMounted.current) return;
       setLoading(false);
+      setError(error.message || 'Failed to load order');
     }
   }, [orderId]);
 
@@ -25,21 +47,11 @@ const useOrderConfirmation = (orderId) => {
     fetchOrder();
   }, [fetchOrder]);
 
-  const getStatusColor = useCallback((status) => {
-    const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      preparing: 'bg-blue-100 text-blue-800',
-      ready: 'bg-green-100 text-green-800',
-      delivered: 'bg-green-100 text-green-800',
-      cancelled: 'bg-red-100 text-red-800',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
-  }, []);
-
   return {
     order,
     loading,
-    getStatusColor,
+    error,
+    getStatusColor: getOrderStatusColor,
   };
 };
 
