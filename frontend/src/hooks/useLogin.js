@@ -48,7 +48,7 @@ const useLogin = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [formData.email, formData.password]);
+  }, [formData.email, formData.password, setErrors]);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
