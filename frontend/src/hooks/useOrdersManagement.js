@@ -6,14 +6,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ordersApi } from '../services/api';
 
+const statuses = ['All', 'pending', 'preparing', 'ready', 'delivered'];
+
 const useOrdersManagement = () => {
   const [orders, setOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
-
-  const statuses = ['All', 'pending', 'preparing', 'ready', 'delivered'];
-
   const fetchOrders = useCallback(async () => {
     try {
       const data = await ordersApi.getAllOrders();
