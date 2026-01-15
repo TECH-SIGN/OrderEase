@@ -3,24 +3,37 @@
  * Custom hook for orders management with polling
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { ordersApi } from '../services/api';
-
-const statuses = ['All', 'pending', 'preparing', 'ready', 'delivered'];
+import { ORDER_STATUSES } from '../constants';
+import { getOrderStatusColor } from '../utils';
 
 const useOrdersManagement = () => {
   const [orders, setOrders] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
   const fetchOrders = useCallback(async () => {
     try {
       const data = await ordersApi.getAllOrders();
+      if (!isMounted.current) return;
       setOrders(data);
       setLoading(false);
+      setError('');
     } catch (error) {
       console.error('Error fetching orders:', error);
+      if (!isMounted.current) return;
       setLoading(false);
+      setError(error.message || 'Failed to load orders');
     }
   }, []);
 
@@ -31,26 +44,23 @@ const useOrdersManagement = () => {
   }, [fetchOrders]);
 
   const handleStatusUpdate = useCallback(async (orderId, newStatus) => {
+    setError('');
     try {
       await ordersApi.updateOrderStatus(orderId, newStatus);
-      fetchOrders();
+      // Optimistic update
+      setOrders(prevOrders =>
+        prevOrders.map(order =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
       setSelectedOrder(null);
     } catch (error) {
       console.error('Error updating order status:', error);
-      alert('Failed to update order status');
+      setError(error.message || 'Failed to update order status');
+      // Refresh to get accurate state
+      fetchOrders();
     }
   }, [fetchOrders]);
-
-  const getStatusColor = useCallback((status) => {
-    const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      preparing: 'bg-blue-100 text-blue-800',
-      ready: 'bg-green-100 text-green-800',
-      delivered: 'bg-green-600 text-white',
-      cancelled: 'bg-red-100 text-red-800',
-    };
-    return colors[status] || 'bg-gray-100 text-gray-800';
-  }, []);
 
   const handleStatusFilterChange = useCallback((status) => {
     setSelectedStatus(status);
@@ -64,19 +74,22 @@ const useOrdersManagement = () => {
     setSelectedOrder(null);
   }, []);
 
-  const filteredOrders = selectedStatus === 'All'
-    ? orders
-    : orders.filter(order => order.status === selectedStatus);
+  const filteredOrders = useMemo(() => {
+    return selectedStatus === 'All'
+      ? orders
+      : orders.filter(order => order.status === selectedStatus);
+  }, [orders, selectedStatus]);
 
   return {
     orders: filteredOrders,
     selectedStatus,
     loading,
+    error,
     selectedOrder,
-    statuses,
+    statuses: ORDER_STATUSES,
     fetchOrders,
     handleStatusUpdate,
-    getStatusColor,
+    getStatusColor: getOrderStatusColor,
     handleStatusFilterChange,
     handleOrderSelect,
     handleCloseOrderDetails,
