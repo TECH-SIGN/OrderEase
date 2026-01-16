@@ -33,7 +33,6 @@ export const API_ENDPOINTS = {
   // User endpoints
   USER: {
     PROFILE: '/user/profile',
-    UPDATE_PROFILE: '/user/profile',
     UPDATE_PASSWORD: '/user/password',
     ORDERS: '/user/orders',
   },

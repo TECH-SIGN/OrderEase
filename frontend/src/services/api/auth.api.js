@@ -61,11 +61,8 @@ const authApi = {
   refreshToken: async (refreshToken) => {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.REFRESH, { refreshToken });
     // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    // Token storage is handled by httpClient interceptor
     const { data: responseData } = response.data;
-    
-    if (responseData.accessToken) {
-      TokenManager.setToken(responseData.accessToken);
-    }
     
     return responseData;
   },
