@@ -154,6 +154,9 @@ httpClient.interceptors.response.use(
           TokenManager.setRefreshToken(responseData.refreshToken);
         }
 
+        // Dispatch event to reload user profile
+        window.dispatchEvent(new CustomEvent('auth:tokenRefreshed'));
+
         // Update the failed requests with new token
         processQueue(null, newAccessToken);
         isRefreshing = false;
