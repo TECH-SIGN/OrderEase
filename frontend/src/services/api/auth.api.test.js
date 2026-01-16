@@ -28,7 +28,7 @@ describe('Auth API Integration', () => {
   });
 
   describe('login', () => {
-    it('should unwrap backend response and store tokens', async () => {
+    it('should unwrap backend response', async () => {
       const mockResponse = {
         data: {
           success: true,
@@ -63,8 +63,7 @@ describe('Auth API Integration', () => {
         accessToken: 'access-token-123',
         refreshToken: 'refresh-token-123',
       });
-      expect(TokenManager.setToken).toHaveBeenCalledWith('access-token-123');
-      expect(TokenManager.setRefreshToken).toHaveBeenCalledWith('refresh-token-123');
+      // Note: Token storage is now handled by httpClient interceptor
     });
 
     it('should handle login error correctly', async () => {
@@ -85,7 +84,7 @@ describe('Auth API Integration', () => {
   });
 
   describe('register', () => {
-    it('should unwrap backend response and store tokens', async () => {
+    it('should unwrap backend response', async () => {
       const mockResponse = {
         data: {
           success: true,
@@ -121,13 +120,12 @@ describe('Auth API Integration', () => {
         accessToken: 'new-access-token',
         refreshToken: 'new-refresh-token',
       });
-      expect(TokenManager.setToken).toHaveBeenCalledWith('new-access-token');
-      expect(TokenManager.setRefreshToken).toHaveBeenCalledWith('new-refresh-token');
+      // Note: Token storage is now handled by httpClient interceptor
     });
   });
 
   describe('refreshToken', () => {
-    it('should unwrap backend response and update tokens', async () => {
+    it('should unwrap backend response', async () => {
       const mockResponse = {
         data: {
           success: true,
@@ -157,8 +155,7 @@ describe('Auth API Integration', () => {
         accessToken: 'new-access-token',
         refreshToken: 'new-refresh-token',
       });
-      expect(TokenManager.setToken).toHaveBeenCalledWith('new-access-token');
-      expect(TokenManager.setRefreshToken).toHaveBeenCalledWith('new-refresh-token');
+      // Note: Token storage is now handled by httpClient interceptor
     });
   });
 

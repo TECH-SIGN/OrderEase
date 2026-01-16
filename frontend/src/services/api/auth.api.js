@@ -18,15 +18,8 @@ const authApi = {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
     
     // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    // Token storage handled by httpClient interceptor
     const { data: responseData } = response.data;
-    
-    // Store tokens if present
-    if (responseData.accessToken) {
-      TokenManager.setToken(responseData.accessToken);
-    }
-    if (responseData.refreshToken) {
-      TokenManager.setRefreshToken(responseData.refreshToken);
-    }
     
     return responseData;
   },
@@ -44,15 +37,8 @@ const authApi = {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.REGISTER, userData);
     
     // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    // Token storage handled by httpClient interceptor
     const { data: responseData } = response.data;
-    
-    // Store tokens if present
-    if (responseData.accessToken) {
-      TokenManager.setToken(responseData.accessToken);
-    }
-    if (responseData.refreshToken) {
-      TokenManager.setRefreshToken(responseData.refreshToken);
-    }
     
     return responseData;
   },
@@ -64,7 +50,7 @@ const authApi = {
   getProfile: async () => {
     const response = await httpClient.get(API_ENDPOINTS.AUTH.PROFILE);
     // Backend returns: { success, message, data: user }
-    return response.data.data || response.data;
+    return response.data.data;
   },
 
   /**
@@ -79,16 +65,8 @@ const authApi = {
     if (data.accessToken) {
       TokenManager.setToken(data.accessToken);
     // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    // Token storage handled by httpClient interceptor
     const { data: responseData } = response.data;
-    
-    if (responseData.accessToken) {
-      TokenManager.setToken(responseData.accessToken);
-    }
-    if (data.refreshToken) {
-      TokenManager.setRefreshToken(data.refreshToken);
-    if (responseData.refreshToken) {
-      TokenManager.setRefreshToken(responseData.refreshToken);
-    }
     
     return data;
     return responseData;
