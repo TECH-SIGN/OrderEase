@@ -17,15 +17,18 @@ const authApi = {
   login: async (credentials) => {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
     
+    // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    const { data: responseData } = response.data;
+    
     // Store tokens if present
-    if (response.data.accessToken) {
-      TokenManager.setToken(response.data.accessToken);
+    if (responseData.accessToken) {
+      TokenManager.setToken(responseData.accessToken);
     }
-    if (response.data.refreshToken) {
-      TokenManager.setRefreshToken(response.data.refreshToken);
+    if (responseData.refreshToken) {
+      TokenManager.setRefreshToken(responseData.refreshToken);
     }
     
-    return response.data;
+    return responseData;
   },
 
   /**
@@ -40,15 +43,18 @@ const authApi = {
   register: async (userData) => {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.REGISTER, userData);
     
+    // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    const { data: responseData } = response.data;
+    
     // Store tokens if present
-    if (response.data.accessToken) {
-      TokenManager.setToken(response.data.accessToken);
+    if (responseData.accessToken) {
+      TokenManager.setToken(responseData.accessToken);
     }
-    if (response.data.refreshToken) {
-      TokenManager.setRefreshToken(response.data.refreshToken);
+    if (responseData.refreshToken) {
+      TokenManager.setRefreshToken(responseData.refreshToken);
     }
     
-    return response.data;
+    return responseData;
   },
 
   /**
@@ -57,7 +63,8 @@ const authApi = {
    */
   getProfile: async () => {
     const response = await httpClient.get(API_ENDPOINTS.AUTH.PROFILE);
-    return response.data;
+    // Backend returns: { success, message, data: user }
+    return response.data.data || response.data;
   },
 
   /**
@@ -68,14 +75,17 @@ const authApi = {
   refreshToken: async (refreshToken) => {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.REFRESH, { refreshToken });
     
-    if (response.data.accessToken) {
-      TokenManager.setToken(response.data.accessToken);
+    // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    const { data: responseData } = response.data;
+    
+    if (responseData.accessToken) {
+      TokenManager.setToken(responseData.accessToken);
     }
-    if (response.data.refreshToken) {
-      TokenManager.setRefreshToken(response.data.refreshToken);
+    if (responseData.refreshToken) {
+      TokenManager.setRefreshToken(responseData.refreshToken);
     }
     
-    return response.data;
+    return responseData;
   },
 
   /**

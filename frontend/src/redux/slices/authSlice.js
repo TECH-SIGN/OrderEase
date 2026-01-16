@@ -74,11 +74,11 @@ const authSlice = createSlice({
       // Note: localStorage is used here for persistence. 
       // In production, consider using Redux middleware or sessionStorage
       state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.token = action.payload.accessToken || action.payload.token;
       state.isAuthenticated = true;
       state.error = null;
       localStorage.setItem('user', JSON.stringify(action.payload.user));
-      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('token', action.payload.accessToken || action.payload.token);
     },
     logout: (state) => {
       // Note: localStorage clearing is done here for immediate state consistency
@@ -103,11 +103,11 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
-        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.token = action.payload.accessToken;
         state.isAuthenticated = true;
-        localStorage.setItem('user', JSON.stringify(action.payload));
-        localStorage.setItem('token', action.payload.token);
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
+        localStorage.setItem('token', action.payload.accessToken);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -120,11 +120,11 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
-        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.token = action.payload.accessToken;
         state.isAuthenticated = true;
-        localStorage.setItem('user', JSON.stringify(action.payload));
-        localStorage.setItem('token', action.payload.token);
+        localStorage.setItem('user', JSON.stringify(action.payload.user));
+        localStorage.setItem('token', action.payload.accessToken);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;

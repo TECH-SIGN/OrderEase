@@ -125,17 +125,21 @@ httpClient.interceptors.response.use(
           { refreshToken }
         );
 
-        TokenManager.setToken(data.token);
-        if (data.refreshToken) {
-          TokenManager.setRefreshToken(data.refreshToken);
+        // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+        const { data: responseData } = data;
+        const newAccessToken = responseData.accessToken;
+
+        TokenManager.setToken(newAccessToken);
+        if (responseData.refreshToken) {
+          TokenManager.setRefreshToken(responseData.refreshToken);
         }
 
         // Update the failed requests with new token
-        processQueue(null, data.token);
+        processQueue(null, newAccessToken);
         isRefreshing = false;
 
         // Retry the original request with new token
-        originalRequest.headers.Authorization = `Bearer ${data.token}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return httpClient(originalRequest);
       } catch (refreshError) {
         // Refresh failed, logout user
@@ -158,15 +162,16 @@ httpClient.interceptors.response.use(
 
     switch (status) {
       case 400:
-        errorMessage = error.response.data?.message || ERROR_MESSAGES.BAD_REQUEST;
+        // Extract error message from backend response
+        errorMessage = error.response.data?.error || error.response.data?.message || ERROR_MESSAGES.BAD_REQUEST;
         errorType = 'BAD_REQUEST';
         break;
       case 403:
-        errorMessage = ERROR_MESSAGES.FORBIDDEN;
+        errorMessage = error.response.data?.error || error.response.data?.message || ERROR_MESSAGES.FORBIDDEN;
         errorType = 'FORBIDDEN';
         break;
       case 404:
-        errorMessage = ERROR_MESSAGES.NOT_FOUND;
+        errorMessage = error.response.data?.error || error.response.data?.message || ERROR_MESSAGES.NOT_FOUND;
         errorType = 'NOT_FOUND';
         break;
       case 408:
@@ -177,11 +182,11 @@ httpClient.interceptors.response.use(
       case 502:
       case 503:
       case 504:
-        errorMessage = ERROR_MESSAGES.SERVER_ERROR;
+        errorMessage = error.response.data?.error || error.response.data?.message || ERROR_MESSAGES.SERVER_ERROR;
         errorType = 'SERVER_ERROR';
         break;
       default:
-        errorMessage = error.response.data?.message || ERROR_MESSAGES.DEFAULT;
+        errorMessage = error.response.data?.error || error.response.data?.message || ERROR_MESSAGES.DEFAULT;
         errorType = 'API_ERROR';
     }
 
