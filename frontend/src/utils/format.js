@@ -102,7 +102,7 @@ export const capitalizeFirst = (text) => {
 export const formatStatusForDisplay = (status) => {
   if (!status) return '';
   if (status === 'All') return 'All';
-  return status.charAt(0) + status.slice(1).toLowerCase();
+  return capitalizeFirst(status);
 };
 
 /**
