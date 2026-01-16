@@ -56,7 +56,6 @@ const OrdersManagementPage = () => {
             >
               {status === 'All' ? 'All' : status.charAt(0) + status.slice(1).toLowerCase()}
             </button>
-            </button>
           ))}
         </div>
 

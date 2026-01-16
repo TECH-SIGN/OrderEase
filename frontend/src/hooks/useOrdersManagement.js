@@ -3,7 +3,7 @@
  * Custom hook for orders management with pagination and polling
  */
 
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ordersApi } from '../services/api';
 import { ORDER_STATUSES } from '../constants';
 import { getOrderStatusColor } from '../utils';
