@@ -84,13 +84,25 @@ export const truncateText = (text, maxLength = 50) => {
 };
 
 /**
- * Capitalize first letter
+ * Capitalize first letter of a string
  * @param {string} text - Text to capitalize
  * @returns {string} Capitalized text
  */
 export const capitalizeFirst = (text) => {
   if (!text) return '';
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+};
+
+/**
+ * Format order status for display
+ * Converts UPPERCASE backend status to Capitalized format
+ * @param {string} status - Order status (e.g., 'PENDING', 'PREPARING')
+ * @returns {string} Formatted status for display (e.g., 'Pending', 'Preparing')
+ */
+export const formatStatusForDisplay = (status) => {
+  if (!status) return '';
+  if (status === 'All') return 'All';
+  return status.charAt(0) + status.slice(1).toLowerCase();
 };
 
 /**

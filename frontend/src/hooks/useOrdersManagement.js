@@ -8,12 +8,14 @@ import { ordersApi } from '../services/api';
 import { ORDER_STATUSES } from '../constants';
 import { getOrderStatusColor } from '../utils';
 
+const ORDERS_PER_PAGE = 10;
+
 const useOrdersManagement = () => {
   const [orders, setOrders] = useState([]);
   const [pagination, setPagination] = useState({
     total: 0,
     page: 1,
-    limit: 10,
+    limit: ORDERS_PER_PAGE,
     totalPages: 0,
   });
   const [selectedStatus, setSelectedStatus] = useState('All');
@@ -31,7 +33,7 @@ const useOrdersManagement = () => {
   const fetchOrders = useCallback(async (page = 1, status = null) => {
     try {
       setLoading(true);
-      const params = { page, limit: pagination.limit };
+      const params = { page, limit: ORDERS_PER_PAGE };
       
       // Only add status filter if it's not 'All'
       if (status && status !== 'All') {
@@ -62,7 +64,7 @@ const useOrdersManagement = () => {
       setLoading(false);
       setError(error.message || 'Failed to load orders');
     }
-  }, [pagination.limit]);
+  }, []);
 
   useEffect(() => {
     const currentStatus = selectedStatus === 'All' ? null : selectedStatus;

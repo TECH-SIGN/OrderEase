@@ -2,6 +2,7 @@ import React from 'react';
 import { useOrdersManagement } from '../../hooks';
 import AdminNavbar from '../../components/admin/AdminNavbar';
 import { ErrorMessage } from '../../components/ui';
+import { formatStatusForDisplay } from '../../utils';
 
 const OrdersManagementPage = () => {
   const {
@@ -54,7 +55,7 @@ const OrdersManagementPage = () => {
                   : 'bg-white text-gray-700 hover:bg-orange-100'
               }`}
             >
-              {status === 'All' ? 'All' : status.charAt(0) + status.slice(1).toLowerCase()}
+              {formatStatusForDisplay(status)}
             </button>
           ))}
         </div>
@@ -80,7 +81,7 @@ const OrdersManagementPage = () => {
                       </p>
                     </div>
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
-                      {order.status.charAt(0) + order.status.slice(1).toLowerCase()}
+                      {formatStatusForDisplay(order.status)}
                     </span>
                   </div>
 
@@ -223,7 +224,7 @@ const OrdersManagementPage = () => {
                 <div>
                   <p className="text-sm text-gray-600">Status</p>
                   <span className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedOrder.status)}`}>
-                    {selectedOrder.status.charAt(0) + selectedOrder.status.slice(1).toLowerCase()}
+                    {formatStatusForDisplay(selectedOrder.status)}
                   </span>
                 </div>
                 <div>
