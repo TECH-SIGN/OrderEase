@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { useAddToCart } from '../../hooks';
 
-const MenuItem = memo(({ item }) => {
+const MenuItem = ({ item }) => {
   const { handleAddToCart } = useAddToCart(item);
 
   return (
@@ -38,8 +38,6 @@ const MenuItem = memo(({ item }) => {
       </div>
     </div>
   );
-});
-
-MenuItem.displayName = 'MenuItem';
+};
 
 export default MenuItem;

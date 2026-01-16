@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminNavbar } from '../../hooks';
 
-const AdminNavbar = memo(() => {
+const AdminNavbar = () => {
   const { user, handleLogout } = useAdminNavbar();
 
   return (
@@ -36,8 +36,6 @@ const AdminNavbar = memo(() => {
       </div>
     </nav>
   );
-});
-
-AdminNavbar.displayName = 'AdminNavbar';
+};
 
 export default AdminNavbar;

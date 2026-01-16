@@ -76,7 +76,10 @@ const useOrdersManagement = () => {
     }, 30000);
     
     return () => clearInterval(interval);
-  }, [fetchOrders, pagination.page, selectedStatus]);
+  // fetchOrders is stable (defined with useCallback and empty deps array)
+  // so it's safe to exclude from dependencies to avoid false warnings
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pagination.page, selectedStatus]);
 
   const handleStatusUpdate = useCallback(async (orderId, newStatus) => {
     setError('');
@@ -96,7 +99,9 @@ const useOrdersManagement = () => {
       const currentStatus = selectedStatus === 'All' ? null : selectedStatus;
       fetchOrders(pagination.page, currentStatus);
     }
-  }, [fetchOrders, selectedStatus, pagination.page]);
+  // fetchOrders is stable - see comment above useEffect
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedStatus, pagination.page]);
 
   const handleStatusFilterChange = useCallback((status) => {
     // Note: This triggers two state updates. In React 18+, these are automatically
