@@ -46,6 +46,14 @@ const processQueue = (error, token = null) => {
 };
 
 /**
+ * Extract error message from backend response
+ * Checks both error and message fields with fallback
+ */
+const extractErrorMessage = (errorResponse, defaultMessage) => {
+  return errorResponse?.error || errorResponse?.message || defaultMessage;
+};
+
+/**
  * Request Interceptor
  * Adds authentication token to all requests
  */
@@ -64,11 +72,23 @@ httpClient.interceptors.request.use(
 
 /**
  * Response Interceptor
- * Handles errors globally and manages token refresh
+ * Handles errors globally, manages token refresh, and auto-stores tokens from auth responses
  */
 httpClient.interceptors.response.use(
   (response) => {
-    // Normalize successful responses
+    // Auto-store tokens from auth endpoints
+    if (response.config.url?.includes('/auth/login') || 
+        response.config.url?.includes('/auth/signup') ||
+        response.config.url?.includes('/auth/refresh')) {
+      const responseData = response.data?.data;
+      if (responseData?.accessToken) {
+        TokenManager.setToken(responseData.accessToken);
+      }
+      if (responseData?.refreshToken) {
+        TokenManager.setRefreshToken(responseData.refreshToken);
+      }
+    }
+    
     return response;
   },
   async (error) => {
@@ -125,17 +145,21 @@ httpClient.interceptors.response.use(
           { refreshToken }
         );
 
-        TokenManager.setToken(data.token);
-        if (data.refreshToken) {
-          TokenManager.setRefreshToken(data.refreshToken);
+        // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+        const { data: responseData } = data;
+        const newAccessToken = responseData.accessToken;
+
+        TokenManager.setToken(newAccessToken);
+        if (responseData.refreshToken) {
+          TokenManager.setRefreshToken(responseData.refreshToken);
         }
 
         // Update the failed requests with new token
-        processQueue(null, data.token);
+        processQueue(null, newAccessToken);
         isRefreshing = false;
 
         // Retry the original request with new token
-        originalRequest.headers.Authorization = `Bearer ${data.token}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return httpClient(originalRequest);
       } catch (refreshError) {
         // Refresh failed, logout user
@@ -158,15 +182,15 @@ httpClient.interceptors.response.use(
 
     switch (status) {
       case 400:
-        errorMessage = error.response.data?.message || ERROR_MESSAGES.BAD_REQUEST;
+        errorMessage = extractErrorMessage(error.response.data, ERROR_MESSAGES.BAD_REQUEST);
         errorType = 'BAD_REQUEST';
         break;
       case 403:
-        errorMessage = ERROR_MESSAGES.FORBIDDEN;
+        errorMessage = extractErrorMessage(error.response.data, ERROR_MESSAGES.FORBIDDEN);
         errorType = 'FORBIDDEN';
         break;
       case 404:
-        errorMessage = ERROR_MESSAGES.NOT_FOUND;
+        errorMessage = extractErrorMessage(error.response.data, ERROR_MESSAGES.NOT_FOUND);
         errorType = 'NOT_FOUND';
         break;
       case 408:
@@ -177,11 +201,11 @@ httpClient.interceptors.response.use(
       case 502:
       case 503:
       case 504:
-        errorMessage = ERROR_MESSAGES.SERVER_ERROR;
+        errorMessage = extractErrorMessage(error.response.data, ERROR_MESSAGES.SERVER_ERROR);
         errorType = 'SERVER_ERROR';
         break;
       default:
-        errorMessage = error.response.data?.message || ERROR_MESSAGES.DEFAULT;
+        errorMessage = extractErrorMessage(error.response.data, ERROR_MESSAGES.DEFAULT);
         errorType = 'API_ERROR';
     }
 

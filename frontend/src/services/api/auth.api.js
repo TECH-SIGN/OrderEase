@@ -16,17 +16,12 @@ const authApi = {
    */
   login: async (credentials) => {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.LOGIN, credentials);
-    const data = response.data.data || response.data;
     
-    // Store tokens if present
-    if (data.accessToken) {
-      TokenManager.setToken(data.accessToken);
-    }
-    if (data.refreshToken) {
-      TokenManager.setRefreshToken(data.refreshToken);
-    }
+    // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    // Token storage handled by httpClient interceptor
+    const { data: responseData } = response.data;
     
-    return data;
+    return responseData;
   },
 
   /**
@@ -40,17 +35,12 @@ const authApi = {
    */
   register: async (userData) => {
     const response = await httpClient.post(API_ENDPOINTS.AUTH.REGISTER, userData);
-    const data = response.data.data || response.data;
     
-    // Store tokens if present
-    if (data.accessToken) {
-      TokenManager.setToken(data.accessToken);
-    }
-    if (data.refreshToken) {
-      TokenManager.setRefreshToken(data.refreshToken);
-    }
+    // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    // Token storage handled by httpClient interceptor
+    const { data: responseData } = response.data;
     
-    return data;
+    return responseData;
   },
 
   /**
@@ -59,7 +49,8 @@ const authApi = {
    */
   getProfile: async () => {
     const response = await httpClient.get(API_ENDPOINTS.AUTH.PROFILE);
-    return response.data.data || response.data;
+    // Backend returns: { success, message, data: user }
+    return response.data.data;
   },
 
   /**
@@ -73,12 +64,12 @@ const authApi = {
     
     if (data.accessToken) {
       TokenManager.setToken(data.accessToken);
-    }
-    if (data.refreshToken) {
-      TokenManager.setRefreshToken(data.refreshToken);
-    }
+    // Backend returns: { success, message, data: { user, accessToken, refreshToken } }
+    // Token storage handled by httpClient interceptor
+    const { data: responseData } = response.data;
     
     return data;
+    return responseData;
   },
 
   /**

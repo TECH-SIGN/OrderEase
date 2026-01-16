@@ -61,7 +61,8 @@ const useLogin = () => {
     try {
       const result = await dispatch(loginUser(formData)).unwrap();
       
-      if (result.role !== 'admin') {
+      // Check if user has admin role
+      if (result.user?.role !== 'admin') {
         setApiError('Access denied. Admin credentials required.');
         setLoading(false);
         return;

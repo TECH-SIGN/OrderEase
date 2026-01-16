@@ -71,24 +71,16 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
-      // Note: localStorage is used here for persistence. 
-      // In production, consider using Redux middleware or sessionStorage
       state.user = action.payload.user;
-      state.token = action.payload.token;
+      state.token = action.payload.accessToken || action.payload.token;
       state.isAuthenticated = true;
       state.error = null;
-      localStorage.setItem('user', JSON.stringify(action.payload.user));
-      localStorage.setItem('token', action.payload.token);
     },
     logout: (state) => {
-      // Note: localStorage clearing is done here for immediate state consistency
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
       state.error = null;
-      localStorage.removeItem('user');
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
     },
     clearAuthError: (state) => {
       state.error = null;
@@ -103,11 +95,9 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
-        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.token = action.payload.accessToken;
         state.isAuthenticated = true;
-        localStorage.setItem('user', JSON.stringify(action.payload));
-        localStorage.setItem('token', action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -120,11 +110,9 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
-        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.token = action.payload.accessToken;
         state.isAuthenticated = true;
-        localStorage.setItem('user', JSON.stringify(action.payload));
-        localStorage.setItem('token', action.payload.token);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -138,7 +126,6 @@ const authSlice = createSlice({
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
-        localStorage.setItem('user', JSON.stringify(action.payload));
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;
@@ -151,9 +138,6 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.loading = false;
         state.error = null;
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
       })
       .addCase(logoutUser.rejected, (state) => {
         // Still logout on error
@@ -161,9 +145,6 @@ const authSlice = createSlice({
         state.token = null;
         state.isAuthenticated = false;
         state.loading = false;
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
       });
   },
 });

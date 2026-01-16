@@ -3,6 +3,7 @@ import authReducer from './slices/authSlice';
 import cartReducer from './slices/cartSlice';
 import menuReducer from './slices/menuSlice';
 import ordersReducer from './slices/ordersSlice';
+import authPersistenceMiddleware from './middleware/authPersistenceMiddleware';
 
 export const store = configureStore({
   reducer: {
@@ -17,5 +18,5 @@ export const store = configureStore({
         // Ignore these action types
         ignoredActions: ['auth/logout'],
       },
-    }),
+    }).concat(authPersistenceMiddleware),
 });
