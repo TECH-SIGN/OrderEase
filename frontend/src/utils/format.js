@@ -84,13 +84,25 @@ export const truncateText = (text, maxLength = 50) => {
 };
 
 /**
- * Capitalize first letter
+ * Capitalize first letter of a string
  * @param {string} text - Text to capitalize
  * @returns {string} Capitalized text
  */
 export const capitalizeFirst = (text) => {
   if (!text) return '';
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+};
+
+/**
+ * Format order status for display
+ * Converts UPPERCASE backend status to Capitalized format
+ * @param {string} status - Order status (e.g., 'PENDING', 'PREPARING')
+ * @returns {string} Formatted status for display (e.g., 'Pending', 'Preparing')
+ */
+export const formatStatusForDisplay = (status) => {
+  if (!status) return '';
+  if (status === 'All') return 'All';
+  return capitalizeFirst(status);
 };
 
 /**
@@ -109,10 +121,13 @@ export const toTitleCase = (text) => {
 
 /**
  * Get Tailwind CSS classes for order status badge
- * @param {string} status - Order status
+ * @param {string} status - Order status (case-insensitive)
  * @returns {string} Tailwind CSS classes for status badge
  */
 export const getOrderStatusColor = (status) => {
+  // Normalize status to lowercase for comparison
+  const normalizedStatus = status ? status.toLowerCase() : '';
+  
   const colors = {
     pending: 'bg-yellow-100 text-yellow-800',
     preparing: 'bg-blue-100 text-blue-800',
@@ -120,5 +135,5 @@ export const getOrderStatusColor = (status) => {
     delivered: 'bg-green-600 text-white',
     cancelled: 'bg-red-100 text-red-800',
   };
-  return colors[status] || 'bg-gray-100 text-gray-800';
+  return colors[normalizedStatus] || 'bg-gray-100 text-gray-800';
 };
