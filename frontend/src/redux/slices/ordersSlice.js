@@ -127,11 +127,29 @@ const ordersSlice = createSlice({
           } else if (Array.isArray(action.payload)) {
             // Fallback: backend returns array directly
             state.orders = action.payload;
+            state.pagination = {
+              page: 1,
+              limit: action.payload.length,
+              total: action.payload.length,
+              totalPages: 1,
+            };
           } else {
             state.orders = [];
+            state.pagination = {
+              page: 1,
+              limit: 0,
+              total: 0,
+              totalPages: 0,
+            };
           }
         } else {
           state.orders = [];
+          state.pagination = {
+            page: 1,
+            limit: 0,
+            total: 0,
+            totalPages: 0,
+          };
         }
         state.lastFetched = new Date().toISOString();
       })
