@@ -125,7 +125,7 @@ describe('Auth API Integration', () => {
   });
 
   describe('refreshToken', () => {
-    it('should unwrap backend response', async () => {
+    it('should unwrap backend response and set token', async () => {
       const mockResponse = {
         data: {
           success: true,
@@ -155,7 +155,7 @@ describe('Auth API Integration', () => {
         accessToken: 'new-access-token',
         refreshToken: 'new-refresh-token',
       });
-      // Note: Token storage is now handled by httpClient interceptor
+      expect(TokenManager.setToken).toHaveBeenCalledWith('new-access-token');
     });
   });
 
