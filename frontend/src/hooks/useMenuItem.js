@@ -3,7 +3,7 @@
  * Custom hook for adding menu items to cart
  */
 
-import { useCallback } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/slices/cartSlice';
 
@@ -15,16 +15,23 @@ import { addToCart } from '../redux/slices/cartSlice';
  */
 const useAddToCart = (item) => {
   const dispatch = useDispatch();
+  const itemRef = useRef(item);
+
+  // Keep the ref updated with the latest item
+  useEffect(() => {
+    itemRef.current = item;
+  }, [item]);
 
   const handleAddToCart = useCallback(() => {
-    if (!item || typeof item !== 'object' || !item._id) {
+    const currentItem = itemRef.current;
+    if (!currentItem || typeof currentItem !== 'object' || !currentItem._id) {
       if (process.env.NODE_ENV !== 'production') {
-        console.error('useAddToCart: item parameter must be an object with _id property', item);
+        console.error('useAddToCart: item parameter must be an object with _id property', currentItem);
       }
       return;
     }
-    dispatch(addToCart(item));
-  }, [dispatch, item]);
+    dispatch(addToCart(currentItem));
+  }, [dispatch]);
 
   return {
     handleAddToCart,

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavbar } from '../../hooks';
 
-const Navbar = () => {
+const Navbar = memo(() => {
   const { cartCount } = useNavbar();
 
   return (
@@ -29,6 +29,8 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
+});
+
+Navbar.displayName = 'Navbar';
 
 export default Navbar;
