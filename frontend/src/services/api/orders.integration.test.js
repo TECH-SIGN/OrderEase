@@ -3,11 +3,13 @@
  * Verifies that order API integration matches backend contract
  */
 
+import { API_ENDPOINTS } from '../../config/api.config';
+import { ORDER_STATUSES } from '../../constants';
+import { getOrderStatusColor } from '../../utils';
+
 describe('Orders API Integration Contract', () => {
   describe('API Endpoints Configuration', () => {
     it('should have correct order endpoints', () => {
-      const { API_ENDPOINTS } = require('../../config/api.config');
-      
       expect(API_ENDPOINTS.ORDERS.LIST).toBe('/order');
       expect(API_ENDPOINTS.ORDERS.CREATE).toBe('/order');
       expect(API_ENDPOINTS.ORDERS.CREATE_FROM_CART).toBe('/order/from-cart');
@@ -19,8 +21,6 @@ describe('Orders API Integration Contract', () => {
 
   describe('Order Status Constants', () => {
     it('should use UPPERCASE status values matching backend', () => {
-      const { ORDER_STATUSES } = require('../../constants');
-      
       // Backend uses UPPERCASE: PENDING, PREPARING, READY, DELIVERED, CANCELLED
       expect(ORDER_STATUSES).toContain('PENDING');
       expect(ORDER_STATUSES).toContain('PREPARING');
@@ -83,8 +83,6 @@ describe('Orders API Integration Contract', () => {
 
   describe('Status Color Utility', () => {
     it('should handle case-insensitive status colors', () => {
-      const { getOrderStatusColor } = require('../../utils');
-      
       // Should handle both UPPERCASE and lowercase
       expect(getOrderStatusColor('PENDING')).toBe('bg-yellow-100 text-yellow-800');
       expect(getOrderStatusColor('pending')).toBe('bg-yellow-100 text-yellow-800');
