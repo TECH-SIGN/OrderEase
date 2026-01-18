@@ -421,7 +421,7 @@ Local HTTPS setup is essential for:
 ```
 Browser (https://orderease.dev:3001)
    ↓ User visits frontend
-Frontend Dev Server (HTTPS on port 3000)
+Frontend Dev Server (HTTPS on port 3001)
    ↓ API requests to /api/*
 Proxy Middleware (setupProxy.js)
    ↓ Forwards to backend
