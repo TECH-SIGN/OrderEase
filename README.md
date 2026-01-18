@@ -553,7 +553,10 @@ Frontend Dev Server (HTTPS)
 Backend API (HTTP on localhost:3000)
 ```
 
-📖 **Full documentation**: See [HTTPS_SETUP.md](./HTTPS_SETUP.md) for platform-specific instructions and troubleshooting.
+📖 **Full documentation**: 
+- **Windows users**: See [WINDOWS_HTTPS_SETUP.md](./WINDOWS_HTTPS_SETUP.md) for step-by-step Windows guide
+- **All platforms**: See [HTTPS_SETUP.md](./HTTPS_SETUP.md) for platform-specific instructions
+- **Detailed guide**: See [frontend/README.md](./frontend/README.md#-local-https-setup-orderease-dev) for comprehensive documentation
 
 ## 🚀 Running the Application
 
