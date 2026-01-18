@@ -419,7 +419,7 @@ Local HTTPS setup is essential for:
 ### Architecture Flow
 
 ```
-Browser (https://orderease.dev:3000)
+Browser (https://orderease.dev:3001)
    ↓ User visits frontend
 Frontend Dev Server (HTTPS on port 3000)
    ↓ API requests to /api/*
@@ -541,7 +541,7 @@ This installs required packages:
 Update your backend `.env` file to allow the HTTPS origin:
 
 ```env
-CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3000
+CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3001
 ```
 
 The backend will now accept requests from both HTTP and HTTPS origins.
@@ -564,13 +564,13 @@ cd frontend
 npm run dev:https
 ```
 
-Frontend runs on: `https://orderease.dev:3000`
+Frontend runs on: `https://orderease.dev:3001`
 
 **What happens:**
 1. Script checks if certificates exist
 2. If missing, shows setup instructions and exits
 3. If found, starts dev server with HTTPS enabled
-4. Browser opens to `https://orderease.dev:3000`
+4. Browser opens to `https://orderease.dev:3001`
 5. You should see a 🔒 green lock (trusted HTTPS)
 
 ### Configuration Files
@@ -600,7 +600,7 @@ Handles proxying from HTTPS frontend to HTTP backend:
 
 After setup, verify:
 
-- [ ] Visit `https://orderease.dev:3000` - Should load without warnings
+- [ ] Visit `https://orderease.dev:3001` - Should load without warnings
 - [ ] Browser shows 🔒 green lock in address bar
 - [ ] Certificate is valid and issued by "mkcert"
 - [ ] API requests to `/api/*` work correctly
@@ -646,7 +646,7 @@ npm install
 **Solution:**
 Update `backend/.env`:
 ```env
-CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3000
+CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3001
 ```
 
 #### "Host Not Found" / Cannot Reach orderease.dev

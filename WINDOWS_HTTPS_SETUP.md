@@ -121,7 +121,7 @@ This installs the required proxy and HTTPS dependencies.
 Edit `backend\.env` file:
 
 ```env
-CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3000
+CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3001
 ```
 
 ### 9. Start Backend
@@ -150,11 +150,11 @@ npm run dev:https
 The script will:
 1. Check if certificates exist
 2. If found, start the server with HTTPS
-3. Open your browser to `https://orderease.dev:3000`
+3. Open your browser to `https://orderease.dev:3001`
 
 ## Verify It's Working
 
-1. Browser should open to `https://orderease.dev:3000`
+1. Browser should open to `https://orderease.dev:3001`
 2. Look for the 🔒 **green lock** in the address bar
 3. Click the lock → Should show "Certificate (Valid)" issued by "mkcert"
 4. No SSL warnings or errors
@@ -213,7 +213,7 @@ taskkill /PID <pid_number> /F
 # Replace <pid_number> with actual number
 ```
 
-### Can't reach https://orderease.dev:3000
+### Can't reach https://orderease.dev:3001
 
 **Checklist:**
 1. ✅ Is backend running? (check other PowerShell window)

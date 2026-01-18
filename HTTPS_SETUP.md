@@ -29,7 +29,7 @@ npm install
 
 # 6. Configure backend CORS
 # Edit backend/.env and add:
-# CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3000
+# CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3001
 
 # 7. Start backend
 cd ../backend
@@ -40,7 +40,7 @@ cd ../frontend
 npm run dev:https
 ```
 
-Visit: `https://orderease.dev:3000` ✨
+Visit: `https://orderease.dev:3001` ✨
 
 ## Windows Quick Start
 
@@ -80,7 +80,7 @@ npm install
 
 # 7. Configure backend CORS
 # Edit backend\.env and add:
-# CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3000
+# CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3001
 
 # 8. Start backend (in a new terminal)
 cd ..\backend
@@ -91,7 +91,7 @@ cd ..\frontend
 npm run dev:https
 ```
 
-Visit: `https://orderease.dev:3000` ✨
+Visit: `https://orderease.dev:3001` ✨
 
 **Windows Tips:**
 - Use PowerShell or Windows Terminal (recommended)
@@ -194,7 +194,7 @@ Edit `backend/.env`:
 
 ```env
 # Add HTTPS origin to CORS
-CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3000
+CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3001
 ```
 
 ### Frontend Configuration
@@ -224,11 +224,11 @@ cd frontend
 npm run dev:https
 ```
 
-✅ Frontend running on: `https://orderease.dev:3000`
+✅ Frontend running on: `https://orderease.dev:3001`
 
 ## Verification
 
-1. Open browser to `https://orderease.dev:3000`
+1. Open browser to `https://orderease.dev:3001`
 2. Check for 🔒 green lock in address bar
 3. Click the lock icon → Certificate should show "mkcert"
 4. Open DevTools → Console (should have no errors)
@@ -335,7 +335,7 @@ Set-ExecutionPolicy Bypass -Scope Process
 # OR use Command Prompt instead of PowerShell
 ```
 
-#### Can't access `https://orderease.dev:3000` on Windows
+#### Can't access `https://orderease.dev:3001` on Windows
 **Cause:** Firewall blocking or hosts file issue
 
 **Solution:**

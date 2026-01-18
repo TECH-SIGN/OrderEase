@@ -538,7 +538,7 @@ mkcert -cert-file orderease.dev.pem -key-file orderease.dev-key.pem orderease.de
 echo "127.0.0.1    orderease.dev" | sudo tee -a /etc/hosts
 
 # 4. Update backend CORS (backend/.env)
-CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3000
+CORS_ORIGIN=http://localhost:3001,https://orderease.dev:3001
 
 # 5. Start frontend with HTTPS
 npm run dev:https
@@ -546,7 +546,7 @@ npm run dev:https
 
 **Architecture:**
 ```
-Browser (https://orderease.dev:3000)
+Browser (https://orderease.dev:3001)
    ↓
 Frontend Dev Server (HTTPS)
    ↓ proxy (/api)

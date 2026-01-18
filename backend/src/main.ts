@@ -11,6 +11,41 @@ import {
 import { validateEnv } from './config';
 
 /**
+ * Parse and validate CORS origins from configuration
+ */
+function parseCorsOrigins(corsOrigin: string): string | string[] {
+  if (corsOrigin === '*') {
+    return '*';
+  }
+  return corsOrigin.split(',').map(origin => origin.trim());
+}
+
+/**
+ * Create CORS origin validator function
+ */
+function createCorsOriginValidator(allowedOrigins: string | string[]) {
+  return (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow requests with no origin (mobile apps, curl, postman)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    // Allow all origins if wildcard is specified
+    if (allowedOrigins === '*') {
+      return callback(null, true);
+    }
+
+    // Check if origin is in allowed list
+    if (Array.isArray(allowedOrigins) && allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Silently reject disallowed origins to avoid exposing CORS configuration
+    callback(null, false);
+  };
+}
+
+/**
  * Global error handlers for process-level errors
  * These use direct console output instead of AppLoggerService because:
  * - They may be triggered before the app is fully initialized
@@ -84,29 +119,10 @@ async function bootstrap() {
 
   // Enable CORS
   const corsOrigin = configService.get<string>('app.corsOrigin') || '*';
-  const allowedOrigins = corsOrigin === '*' 
-    ? '*' 
-    : corsOrigin.split(',').map(origin => origin.trim());
+  const allowedOrigins = parseCorsOrigins(corsOrigin);
   
   app.enableCors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, postman)
-      if (!origin) {
-        return callback(null, true);
-      }
-      
-      // Allow all origins if wildcard is specified
-      if (allowedOrigins === '*') {
-        return callback(null, true);
-      }
-      
-      // Check if origin is in allowed list
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-      
-      callback(new Error('Not allowed by CORS'));
-    },
+    origin: createCorsOriginValidator(allowedOrigins),
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   });

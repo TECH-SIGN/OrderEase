@@ -5,7 +5,7 @@
  * from the frontend (HTTPS) to the backend (HTTP).
  * 
  * Flow:
- * Browser (https://orderease.dev:3000)
+ * Browser (https://orderease.dev:3001)
  *   ↓ requests to /api/*
  * Frontend Dev Server (proxy middleware)
  *   ↓ forwards to
