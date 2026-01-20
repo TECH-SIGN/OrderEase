@@ -7,6 +7,7 @@
     "build": "pnpm -r build",
     "dev": "pnpm --filter \"./apps/*\" --parallel dev",
     "dev:api-gateway": "pnpm --filter @orderease/api-gateway dev",
+    "dev:backend": "pnpm --filter @orderease/backend dev",
     "dev:order-service": "pnpm --filter @orderease/order-service dev",
     "dev:payment-service": "pnpm --filter @orderease/payment-service dev",
     "start:frontend": "pnpm --filter frontend start",

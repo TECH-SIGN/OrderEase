@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { MESSAGES } from '@orderease/shared-types';
-import { OrderStatus } from './dto/order.dto';
+import { OrderStatus } from '@orderease/shared-dtos';
 import { ORDER_REPOSITORY } from './infra/order.repository.interface';
 import { FOOD_REPOSITORY } from '../food/infra/food.repository.interface';
 import { CART_REPOSITORY } from '../cart/infra/cart.repository.interface';

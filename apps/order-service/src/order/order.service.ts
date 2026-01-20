@@ -3,7 +3,7 @@ import {
   CreateOrderDto,
   CreateOrderFromCartDto,
   UpdateOrderStatusDto,
-} from './dto/order.dto';
+} from '@orderease/shared-dtos';
 import { MESSAGES } from '@orderease/shared-types';
 import { Order, OrderItem } from './domain/order.entity';
 import {
