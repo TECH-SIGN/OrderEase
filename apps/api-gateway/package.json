@@ -1,0 +1,19 @@
+{
+  "name": "@orderease/api-gateway",
+  "version": "1.0.0",
+  "description": "OrderEase API Gateway - Auth, rate limiting, and routing",
+  "author": "TechSign",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'API Gateway stub - no build needed yet'",
+    "dev": "echo 'API Gateway stub - not implemented yet'",
+    "start": "echo 'API Gateway stub - not implemented yet'"
+  },
+  "dependencies": {
+    "@orderease/shared-config": "workspace:*",
+    "@orderease/shared-errors": "workspace:*",
+    "@orderease/shared-types": "workspace:*",
+    "@orderease/shared-utils": "workspace:*"
+  }
+}
