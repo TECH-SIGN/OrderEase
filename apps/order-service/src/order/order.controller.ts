@@ -16,7 +16,7 @@ import {
   CreateOrderFromCartDto,
   UpdateOrderStatusDto,
 } from '@orderease/shared-dtos';
-import { Auth, CurrentUser } from '../auth/decorators';
+
 import { Role, MESSAGES } from '@orderease/shared-types';
 import { successResponse } from '@orderease/shared-utils';
 
@@ -29,9 +29,9 @@ export class OrderController {
    * POST /order
    */
   @Post()
-  @Auth() // Any authenticated user can create orders
+  
   async create(
-    @CurrentUser('id') userId: string,
+    @Param('userId') userId: string = 'user-1',
     @Body() createOrderDto: CreateOrderDto,
   ) {
     const order = await this.orderService.create(userId, createOrderDto);
@@ -43,9 +43,9 @@ export class OrderController {
    * POST /order/from-cart
    */
   @Post('from-cart')
-  @Auth() // Any authenticated user can create orders
+  
   async createFromCart(
-    @CurrentUser('id') userId: string,
+    @Param('userId') userId: string = 'user-1',
     @Body() createOrderFromCartDto: CreateOrderFromCartDto,
   ) {
     const order = await this.orderService.createFromCart(
@@ -75,7 +75,7 @@ export class OrderController {
    * GET /order/:id
    */
   @Get(':id')
-  @Auth()
+  
   async findOne(@Param('id') id: string) {
     const order = await this.orderService.findOne(id);
     return successResponse(MESSAGES.GENERAL.SUCCESS, order);

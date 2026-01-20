@@ -5,10 +5,6 @@ import {
   type IUserRepository,
   USER_REPOSITORY,
 } from '../user/infra/user.repository.interface';
-import {
-  type IOrderRepository,
-  ORDER_REPOSITORY,
-} from '../order/infra/order.repository.interface';
 import { User } from '../user/domain/user.entity';
 
 @Injectable()
@@ -16,29 +12,25 @@ export class AdminService {
   constructor(
     @Inject(USER_REPOSITORY)
     private userRepository: IUserRepository,
-    @Inject(ORDER_REPOSITORY)
-    private orderRepository: IOrderRepository,
   ) {}
 
   /**
    * Get dashboard statistics
+   * NOTE: Order statistics should be fetched from order-service via API Gateway
    */
   async getDashboard() {
-    const [totalUsers, totalAdmins, totalOrders, recentOrdersResult] =
-      await Promise.all([
-        this.userRepository.count(),
-        this.userRepository.count({ role: 'ADMIN' }),
-        this.orderRepository.findAll(1, 1, {}).then((r) => r.total),
-        this.orderRepository.findAll(1, 5, {}),
-      ]);
+    const [totalUsers, totalAdmins] = await Promise.all([
+      this.userRepository.count(),
+      this.userRepository.count({ role: 'ADMIN' }),
+    ]);
 
     return {
       statistics: {
         totalUsers,
         totalAdmins,
-        totalOrders,
+        totalOrders: 0, // TODO: Fetch from order-service
       },
-      recentOrders: recentOrdersResult.orders,
+      recentOrders: [], // TODO: Fetch from order-service
     };
   }
 
@@ -61,6 +53,7 @@ export class AdminService {
 
   /**
    * Get user by ID
+   * NOTE: User orders should be fetched separately from order-service
    */
   async getUserById(id: string) {
     const user = await this.userRepository.findById(id);
@@ -69,14 +62,10 @@ export class AdminService {
       throw new NotFoundException(MESSAGES.USER.NOT_FOUND);
     }
 
-    // Get recent orders for the user
-    const ordersResult = await this.orderRepository.findAll(1, 5, {
-      userId: id,
-    });
-
+    // TODO: Fetch orders from order-service via HTTP
     return {
       ...user.toSafeUser(),
-      orders: ordersResult.orders,
+      orders: [], // Placeholder - fetch from order-service
     };
   }
 

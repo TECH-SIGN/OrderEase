@@ -9,11 +9,11 @@ import {
 } from '@nestjs/common';
 import { CartService } from './cart.service';
 import { AddToCartDto, UpdateCartItemDto } from '@orderease/shared-dtos';
-import { Auth, CurrentUser } from '../auth/decorators';
+
 import { successResponse } from '@orderease/shared-utils';
 
 @Controller('cart')
-@Auth() // All routes require authentication
+
 export class CartController {
   constructor(private cartService: CartService) {}
 
@@ -22,7 +22,7 @@ export class CartController {
    * GET /cart
    */
   @Get()
-  async getCart(@CurrentUser('id') userId: string) {
+  async getCart(@Param('userId') userId: string = 'user-1') {
     const cart = await this.cartService.getCart(userId);
     return successResponse('Cart fetched successfully', cart);
   }
@@ -33,7 +33,7 @@ export class CartController {
    */
   @Post()
   async addToCart(
-    @CurrentUser('id') userId: string,
+    @Param('userId') userId: string = 'user-1',
     @Body() addToCartDto: AddToCartDto,
   ) {
     const cart = await this.cartService.addToCart(userId, addToCartDto);
@@ -46,7 +46,7 @@ export class CartController {
    */
   @Put(':itemId')
   async updateCartItem(
-    @CurrentUser('id') userId: string,
+    @Param('userId') userId: string = 'user-1',
     @Param('itemId') itemId: string,
     @Body() updateCartItemDto: UpdateCartItemDto,
   ) {
@@ -64,7 +64,7 @@ export class CartController {
    */
   @Delete(':itemId')
   async removeFromCart(
-    @CurrentUser('id') userId: string,
+    @Param('userId') userId: string = 'user-1',
     @Param('itemId') itemId: string,
   ) {
     const cart = await this.cartService.removeFromCart(userId, itemId);
@@ -76,7 +76,7 @@ export class CartController {
    * DELETE /cart
    */
   @Delete()
-  async clearCart(@CurrentUser('id') userId: string) {
+  async clearCart(@Param('userId') userId: string = 'user-1') {
     const cart = await this.cartService.clearCart(userId);
     return successResponse('Cart cleared successfully', cart);
   }

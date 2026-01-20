@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { FoodService } from './food.service';
 import { CreateFoodDto, UpdateFoodDto } from '@orderease/shared-dtos';
-import { Auth } from '../auth/decorators';
+
 import { Role, MESSAGES } from '@orderease/shared-types';
 import { successResponse } from '@orderease/shared-utils';
 

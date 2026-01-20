@@ -11,10 +11,6 @@ import {
   type IUserRepository,
   USER_REPOSITORY,
 } from './infra/user.repository.interface';
-import {
-  type IOrderRepository,
-  ORDER_REPOSITORY,
-} from '../order/infra/order.repository.interface';
 import { User } from './domain/user.entity';
 
 @Injectable()
@@ -22,8 +18,6 @@ export class UserService {
   constructor(
     @Inject(USER_REPOSITORY)
     private userRepository: IUserRepository,
-    @Inject(ORDER_REPOSITORY)
-    private orderRepository: IOrderRepository,
   ) {}
 
   /**
@@ -89,20 +83,26 @@ export class UserService {
   }
 
   /**
-   * Get user's orders
+   * Get user orders
+   * NOTE: This now returns empty results. Orders should be fetched via API Gateway
+   * from the order-service at /api/order endpoint
    */
   async getUserOrders(userId: string, page = 1, limit = 10) {
-    const result = await this.orderRepository.findAll(page, limit, {
-      userId,
-    });
+    // Validate user exists
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
 
+    // TODO: Call order-service via HTTP to get orders
+    // For now, return empty result to maintain API compatibility
     return {
-      orders: result.orders,
+      orders: [],
       pagination: {
-        total: result.total,
+        total: 0,
         page,
         limit,
-        totalPages: Math.ceil(result.total / limit),
+        totalPages: 0,
       },
     };
   }
