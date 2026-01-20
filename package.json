@@ -1,23 +1,30 @@
 {
   "name": "orderease",
   "version": "1.0.0",
-  "description": "Restaurant Ordering System - Full Stack MERN Application",
+  "private": true,
+  "description": "Restaurant Ordering System - Monorepo with pnpm Workspace",
   "scripts": {
-    "install-all": "npm install --prefix backend && npm install --prefix frontend",
-    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
-    "seed": "npm run seed --prefix backend",
-    "start-backend": "npm run dev --prefix backend",
-    "start-frontend": "npm start --prefix frontend",
-    "build-frontend": "npm run build --prefix frontend"
+    "build": "pnpm -r build",
+    "dev": "pnpm --filter \"./apps/*\" --parallel dev",
+    "dev:api-gateway": "pnpm --filter @orderease/api-gateway dev",
+    "dev:order-service": "pnpm --filter @orderease/order-service dev",
+    "dev:payment-service": "pnpm --filter @orderease/payment-service dev",
+    "start:frontend": "pnpm --filter frontend start",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "clean": "pnpm -r exec rm -rf dist node_modules",
+    "install-all": "pnpm install"
   },
   "keywords": [
     "restaurant",
     "ordering",
-    "mern",
+    "monorepo",
+    "pnpm-workspace",
+    "nestjs",
     "react",
     "nodejs",
-    "mongodb",
-    "express"
+    "postgresql",
+    "prisma"
   ],
   "author": "TechSign",
   "license": "MIT",
@@ -27,5 +34,9 @@
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   }
 }
