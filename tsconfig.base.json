@@ -23,7 +23,9 @@
       "@orderease/shared-errors": ["./packages/shared-errors/src"],
       "@orderease/shared-errors/*": ["./packages/shared-errors/src/*"],
       "@orderease/shared-config": ["./packages/shared-config/src"],
-      "@orderease/shared-config/*": ["./packages/shared-config/src/*"]
+      "@orderease/shared-config/*": ["./packages/shared-config/src/*"],
+      "@orderease/shared-dtos": ["./packages/shared-dtos/src"],
+      "@orderease/shared-dtos/*": ["./packages/shared-dtos/src/*"]
     }
   },
   "exclude": ["node_modules", "dist"]
