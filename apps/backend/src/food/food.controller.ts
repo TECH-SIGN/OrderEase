@@ -12,7 +12,7 @@ import { FoodService } from './food.service';
 import { CreateFoodDto, UpdateFoodDto } from './dto/food.dto';
 import { Auth } from '../auth/decorators';
 import { Role, MESSAGES } from '@orderease/shared-contracts';
-import { successResponse } from '../utils';
+import { successResponse } from '@orderease/shared-contracts';
 
 @Controller('food')
 export class FoodController {

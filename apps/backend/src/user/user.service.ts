@@ -8,7 +8,7 @@ import {
   UpdateProfileDto,
   UpdatePasswordDto,
 } from '@orderease/shared-contracts';
-import { hashPassword, comparePassword } from '../utils';
+import { hashPassword, comparePassword } from '@orderease/shared-contracts';
 import { MESSAGES } from '@orderease/shared-contracts';
 import {
   type IUserRepository,

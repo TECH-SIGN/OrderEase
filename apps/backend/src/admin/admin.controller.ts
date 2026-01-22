@@ -13,7 +13,7 @@ import { AdminService } from './admin.service';
 import { UpdateUserRoleDto, AdminUpdateUserDto } from './dto';
 import { Auth, CurrentUser } from '../auth/decorators';
 import { Role, MESSAGES } from '@orderease/shared-contracts';
-import { successResponse } from '../utils';
+import { successResponse } from '@orderease/shared-contracts';
 
 @Controller('admin')
 @Auth(Role.ADMIN) // All routes in this controller require ADMIN role

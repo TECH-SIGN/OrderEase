@@ -7,7 +7,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { SignUpDto, LoginDto } from './dto';
-import { hashPassword, comparePassword, parseJwtExpiration } from '../utils';
+import {
+  hashPassword,
+  comparePassword,
+  parseJwtExpiration,
+} from '@orderease/shared-contracts';
 import { MESSAGES } from '@orderease/shared-contracts';
 import {
   type IUserRepository,

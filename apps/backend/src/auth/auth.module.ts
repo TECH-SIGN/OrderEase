@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies';
-import { parseJwtExpiration } from '../utils';
+import { parseJwtExpiration } from '@orderease/shared-contracts';
 import { UserModule } from '../user/user.module';
 
 @Module({

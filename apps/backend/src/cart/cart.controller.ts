@@ -10,7 +10,7 @@ import {
 import { CartService } from './cart.service';
 import { AddToCartDto, UpdateCartItemDto } from './dto/cart.dto';
 import { Auth, CurrentUser } from '../auth/decorators';
-import { successResponse } from '../utils';
+import { successResponse } from '@orderease/shared-contracts';
 
 @Controller('cart')
 @Auth() // All routes require authentication

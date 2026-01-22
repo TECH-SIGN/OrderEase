@@ -1,6 +1,6 @@
 import { Role } from '@orderease/shared-contracts';
 import { PrismaService } from '../database';
-import { hashPassword } from '../utils';
+import { hashPassword } from '@orderease/shared-contracts';
 
 /**
  * Factory helpers for creating test data

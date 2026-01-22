@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PublicService } from './public.service';
-import { successResponse } from '../utils';
+import { successResponse } from '@orderease/shared-contracts';
 import { MESSAGES } from '@orderease/shared-contracts';
 
 @Controller('menu')

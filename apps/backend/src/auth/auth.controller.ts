@@ -2,7 +2,7 @@ import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpDto, LoginDto } from './dto';
 import { MESSAGES } from '@orderease/shared-contracts';
-import { successResponse } from '../utils';
+import { successResponse } from '@orderease/shared-contracts';
 
 @Controller('auth')
 export class AuthController {

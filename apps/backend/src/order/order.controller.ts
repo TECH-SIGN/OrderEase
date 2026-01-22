@@ -18,7 +18,7 @@ import {
 } from './dto/order.dto';
 import { Auth, CurrentUser } from '../auth/decorators';
 import { Role, MESSAGES } from '@orderease/shared-contracts';
-import { successResponse } from '../utils';
+import { successResponse } from '@orderease/shared-contracts';
 
 @Controller('order')
 export class OrderController {
