@@ -1,10 +1,13 @@
 # OrderEase - Restaurant Ordering System
 
-A modern, full-stack restaurant ordering system built with NestJS, React, PostgreSQL, and Prisma. This project demonstrates production-ready architecture with modular design, comprehensive authentication, role-based access control, and industry best practices.
+> **🎯 Monorepo Architecture**: This project has been migrated to a pnpm workspace-based monorepo. See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed architecture documentation and [README.monorepo.md](./README.monorepo.md) for monorepo-specific information.
+
+A modern, scalable restaurant ordering system built with NestJS microservices, React, PostgreSQL, and Prisma. This project demonstrates production-ready architecture with clean separation of concerns, comprehensive authentication, role-based access control, and industry best practices.
 
 ## 📖 Table of Contents
 
 - [Overview](#-overview)
+- [Monorepo Architecture](#-monorepo-architecture)
 - [Key Features](#-key-features)
 - [Architecture](#-architecture)
 - [Tech Stack](#-tech-stack)
@@ -20,6 +23,27 @@ A modern, full-stack restaurant ordering system built with NestJS, React, Postgr
 - [Troubleshooting](#-troubleshooting)
 - [Contributing](#-contributing)
 - [License](#-license)
+
+## 🏗️ Monorepo Architecture
+
+OrderEase now uses a **pnpm workspace-based monorepo** for better code organization and scalability:
+
+```
+orderease/
+├── apps/
+│   ├── api-gateway/        # HTTP routing & authentication
+│   ├── backend/            # Auth, User, Admin, Food services
+│   ├── order-service/      # Order & Cart domain services
+│   └── payment-service/    # Payment service (future)
+└── packages/
+    ├── shared-dtos/        # All DTOs
+    ├── shared-types/       # Enums, interfaces, constants
+    ├── shared-utils/       # Pure utilities
+    ├── shared-errors/      # Domain errors
+    └── shared-config/      # Configuration validation
+```
+
+📖 **See [ARCHITECTURE.md](./ARCHITECTURE.md) for complete architecture documentation**
 
 ## 🎯 Overview
 
