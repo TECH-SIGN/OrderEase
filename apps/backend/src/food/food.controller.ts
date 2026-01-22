@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { FoodService } from './food.service';
-import { CreateFoodDto, UpdateFoodDto } from './dto/food.dto';
+import { CreateFoodDto, UpdateFoodDto } from '@orderease/shared-contracts';
 import { Auth } from '../auth/decorators';
 import { Role, MESSAGES } from '@orderease/shared-contracts';
 import { successResponse } from '@orderease/shared-contracts';

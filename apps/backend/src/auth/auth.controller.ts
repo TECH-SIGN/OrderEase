@@ -1,6 +1,6 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignUpDto, LoginDto } from './dto';
+import { SignUpDto, LoginDto } from '@orderease/shared-contracts';
 import { MESSAGES } from '@orderease/shared-contracts';
 import { successResponse } from '@orderease/shared-contracts';
 

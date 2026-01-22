@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { SignUpDto, LoginDto } from './dto';
+import { SignUpDto, LoginDto } from '@orderease/shared-contracts';
 import {
   hashPassword,
   comparePassword,

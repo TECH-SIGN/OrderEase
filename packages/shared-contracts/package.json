@@ -19,6 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
@@ -26,7 +27,11 @@
     "ts-jest": "^29.4.6"
   },
   "dependencies": {
+    "@nestjs/common": "^11.1.12",
+    "@nestjs/config": "^4.0.2",
     "bcrypt": "^6.0.0",
-    "mocha": "^11.7.5"
+    "express": "^5.2.1",
+    "mocha": "^11.7.5",
+    "rxjs": "^7.8.2"
   }
 }

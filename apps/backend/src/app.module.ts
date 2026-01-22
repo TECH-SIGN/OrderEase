@@ -12,7 +12,10 @@ import { OrderModule } from './order';
 import { CartModule } from './cart';
 import { HealthModule } from './health';
 import { appConfig, databaseConfig, jwtConfig } from '@orderease/shared-config';
-import { AppLoggerService, RequestContextMiddleware } from './common';
+import {
+  AppLoggerService,
+  RequestContextMiddleware,
+} from '@orderease/shared-contracts';
 
 @Module({
   imports: [

@@ -2,7 +2,7 @@
  * Food Repository Interface
  */
 
-import { Food } from '../domain/food.entity';
+import { Food } from '@orderease/shared-contracts';
 
 export interface FoodUpdateData {
   name?: string;

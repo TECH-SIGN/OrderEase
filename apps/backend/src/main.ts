@@ -7,7 +7,7 @@ import {
   AppLoggerService,
   GlobalExceptionFilter,
   LoggingInterceptor,
-} from './common';
+} from '@orderease/shared-contracts';
 import { validateEnv } from '@orderease/shared-config';
 
 /**

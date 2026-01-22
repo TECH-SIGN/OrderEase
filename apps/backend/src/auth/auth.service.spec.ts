@@ -9,8 +9,7 @@ import {
   createMockJwtService,
   createMockConfigService,
 } from '../test-utils';
-import * as bcrypt from 'bcrypt';
-import { Role, MESSAGES } from '../constants';
+import { Role, MESSAGES } from '@orderease/shared-contracts';
 
 // Mock the utils module
 jest.mock('../utils', () => ({

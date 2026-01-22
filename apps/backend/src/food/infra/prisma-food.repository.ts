@@ -4,7 +4,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database';
-import { Food } from '../domain/food.entity';
+import { Food } from '@orderease/shared-contracts';
 import { IFoodRepository, FoodUpdateData } from './food.repository.interface';
 
 @Injectable()

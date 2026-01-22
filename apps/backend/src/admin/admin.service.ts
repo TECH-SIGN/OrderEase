@@ -1,5 +1,5 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { UpdateUserRoleDto, AdminUpdateUserDto } from './dto';
+import { UpdateUserRoleDto, AdminUpdateUserDto } from '@orderease/shared-contracts';
 import { MESSAGES } from '@orderease/shared-contracts';
 import {
   type IUserRepository,

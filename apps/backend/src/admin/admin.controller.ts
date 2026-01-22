@@ -10,7 +10,7 @@ import {
   DefaultValuePipe,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { UpdateUserRoleDto, AdminUpdateUserDto } from './dto';
+import { UpdateUserRoleDto, AdminUpdateUserDto } from '@orderease/shared-contracts';
 import { Auth, CurrentUser } from '../auth/decorators';
 import { Role, MESSAGES } from '@orderease/shared-contracts';
 import { successResponse } from '@orderease/shared-contracts';
