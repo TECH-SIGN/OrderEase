@@ -2,24 +2,25 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DatabaseModule } from './database';
+import { DatabaseModule } from '@orderease/shared-database';
 import { AuthModule } from './auth';
 import { AdminModule } from './admin';
 import { UserModule } from './user';
 import { PublicModule } from './public';
 import { FoodModule } from './food';
+import { CartModule } from './cart';
 import { HealthModule } from './health';
-import { appConfig, databaseConfig, jwtConfig } from './config';
+import { appConfig, databaseConfig, jwtConfig } from '@orderease/shared-config';
 import { AppLoggerService, RequestContextMiddleware } from './common';
 
 @Module({
   imports: [
-    // Load environment configuration
+    // Load environment configuration from shared-config
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, databaseConfig, jwtConfig],
     }),
-    // Database module (Prisma)
+    // Database module from shared-database (Prisma)
     DatabaseModule,
     // Feature modules
     AuthModule,
@@ -27,6 +28,7 @@ import { AppLoggerService, RequestContextMiddleware } from './common';
     UserModule,
     PublicModule,
     FoodModule,
+    CartModule,
     HealthModule,
   ],
   controllers: [AppController],

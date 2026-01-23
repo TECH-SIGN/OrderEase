@@ -1,0 +1,16 @@
+{
+  "name": "@orderease/shared-database",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.1",
+    "@nestjs/common": "^10.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

@@ -2,26 +2,22 @@ import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DatabaseModule } from './database';
-import { FoodModule } from './food';
+import { DatabaseModule } from '@orderease/shared-database';
 import { OrderModule } from './order';
-import { CartModule } from './cart';
-import { appConfig, databaseConfig, jwtConfig } from './config';
+import { appConfig, databaseConfig, jwtConfig } from '@orderease/shared-config';
 import { AppLoggerService, RequestContextMiddleware } from './common';
 
 @Module({
   imports: [
-    // Load environment configuration
+    // Load environment configuration from shared-config
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, databaseConfig, jwtConfig],
     }),
-    // Database module (Prisma)
+    // Database module from shared-database (Prisma)
     DatabaseModule,
-    // Feature modules - Order domain only
-    FoodModule, // TODO: Replace with HTTP calls to backend in future iteration
+    // Feature modules - Order domain ONLY
     OrderModule,
-    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppLoggerService],
