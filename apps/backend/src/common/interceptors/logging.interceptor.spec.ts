@@ -3,7 +3,7 @@ import { ExecutionContext, CallHandler } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { of } from 'rxjs';
 import { LoggingInterceptor } from './logging.interceptor';
-import { AppLoggerService } from '../logger/logger.service';
+import { AppLoggerService } from '@orderease/shared-logger';
 import { RequestWithContext } from '../middleware/request-context.middleware';
 
 describe('LoggingInterceptor', () => {

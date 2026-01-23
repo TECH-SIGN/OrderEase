@@ -1,6 +1,6 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { CreateFoodDto, UpdateFoodDto } from '@orderease/shared-dtos';
-import { MESSAGES } from '@orderease/shared-types';
+import { CreateFoodDto, UpdateFoodDto } from '@orderease/shared-contracts';
+import { MESSAGES } from '@orderease/shared-contracts';
 import { Food } from './domain/food.entity';
 import {
   type IFoodRepository,

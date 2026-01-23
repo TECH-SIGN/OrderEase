@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { SignUpDto, LoginDto } from '@orderease/shared-dtos';
+import { SignUpDto, LoginDto } from '@orderease/shared-contracts';
 import { hashPassword, comparePassword, parseJwtExpiration } from '@orderease/shared-utils';
 import { MESSAGES, Role } from '@orderease/shared-types';
 import {
   type IUserRepository,
   USER_REPOSITORY,
 } from '../user/infra/user.repository.interface';
-import { User, UserRole } from '../user/domain/user.entity';
+import { User, UserRole } from '@orderease/shared-contracts';
 
 @Injectable()
 export class AuthService {

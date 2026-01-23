@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GlobalExceptionFilter } from './global-exception.filter';
-import { AppLoggerService } from '../logger/logger.service';
+import { AppLoggerService } from '@orderease/shared-logger';
 import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
 
 describe('GlobalExceptionFilter', () => {

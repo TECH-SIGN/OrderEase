@@ -16,16 +16,14 @@
     "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@orderease/shared-types": ["./packages/shared-types/src"],
-      "@orderease/shared-types/*": ["./packages/shared-types/src/*"],
+      "@orderease/shared-contracts": ["./packages/shared-contracts/src"],
+      "@orderease/shared-contracts/*": ["./packages/shared-contracts/src/*"],
+      "@orderease/shared-logger": ["./packages/shared-logger/src"],
+      "@orderease/shared-logger/*": ["./packages/shared-logger/src/*"],
       "@orderease/shared-utils": ["./packages/shared-utils/src"],
       "@orderease/shared-utils/*": ["./packages/shared-utils/src/*"],
-      "@orderease/shared-errors": ["./packages/shared-errors/src"],
-      "@orderease/shared-errors/*": ["./packages/shared-errors/src/*"],
       "@orderease/shared-config": ["./packages/shared-config/src"],
       "@orderease/shared-config/*": ["./packages/shared-config/src/*"],
-      "@orderease/shared-dtos": ["./packages/shared-dtos/src"],
-      "@orderease/shared-dtos/*": ["./packages/shared-dtos/src/*"],
       "@orderease/shared-database": ["./packages/shared-database/src"],
       "@orderease/shared-database/*": ["./packages/shared-database/src/*"]
     }

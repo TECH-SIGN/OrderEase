@@ -3,8 +3,8 @@ import {
   CreateOrderDto,
   CreateOrderFromCartDto,
   UpdateOrderStatusDto,
-} from '@orderease/shared-dtos';
-import { MESSAGES } from '@orderease/shared-types';
+} from '@orderease/shared-contracts';
+import { MESSAGES } from '@orderease/shared-contracts';
 import { Order, OrderItem } from './domain/order.entity';
 import {
   validateOrderItems,
@@ -13,7 +13,7 @@ import {
   validateFoodAvailability,
   buildOrderItems,
 } from './domain/order.rules';
-import { OrderDomainError } from '@orderease/shared-errors';
+import { OrderDomainError } from '@orderease/shared-contracts';
 import {
   type IOrderRepository,
   ORDER_REPOSITORY,

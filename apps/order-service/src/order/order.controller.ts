@@ -15,9 +15,9 @@ import {
   CreateOrderDto,
   CreateOrderFromCartDto,
   UpdateOrderStatusDto,
-} from '@orderease/shared-dtos';
+} from '@orderease/shared-contracts';
 import { UserId } from '../common/decorators';
-import { Role, MESSAGES } from '@orderease/shared-types';
+import { Role, MESSAGES } from '@orderease/shared-contracts';
 import { successResponse } from '@orderease/shared-utils';
 
 @Controller('order')

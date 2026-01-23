@@ -8,7 +8,7 @@ import {
   Param,
 } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { AddToCartDto, UpdateCartItemDto } from '@orderease/shared-dtos';
+import { AddToCartDto, UpdateCartItemDto } from '@orderease/shared-contracts';
 import { UserId } from '../common/decorators';
 import { successResponse } from '@orderease/shared-utils';
 

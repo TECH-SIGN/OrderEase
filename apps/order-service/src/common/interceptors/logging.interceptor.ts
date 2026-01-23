@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { AppLoggerService } from '../logger/logger.service';
+import { AppLoggerService } from '@orderease/shared-logger';
 import { RequestWithContext } from '../middleware/request-context.middleware';
 import { ConfigService } from '@nestjs/config';
 

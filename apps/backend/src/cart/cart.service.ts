@@ -4,7 +4,7 @@ import {
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
-import { AddToCartDto, UpdateCartItemDto } from '@orderease/shared-dtos';
+import { AddToCartDto, UpdateCartItemDto } from '@orderease/shared-contracts';
 import {
   type ICartRepository,
   CART_REPOSITORY,
@@ -13,7 +13,7 @@ import {
   type IFoodRepository,
   FOOD_REPOSITORY,
 } from '../food/infra/food.repository.interface';
-import { FoodDomainError, CartDomainError } from '@orderease/shared-errors';
+import { FoodDomainError, CartDomainError } from '@orderease/shared-contracts';
 
 @Injectable()
 export class CartService {

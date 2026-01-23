@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { FoodService } from './food.service';
-import { CreateFoodDto, UpdateFoodDto } from '@orderease/shared-dtos';
+import { CreateFoodDto, UpdateFoodDto } from '@orderease/shared-contracts';
 import { Auth } from '../auth/decorators';
-import { Role, MESSAGES } from '@orderease/shared-types';
+import { Role, MESSAGES } from '@orderease/shared-contracts';
 import { successResponse } from '@orderease/shared-utils';
 
 @Controller('food')

@@ -1,4 +1,4 @@
 export * from './food.module';
 export * from './food.service';
 export * from './food.controller';
-export * from '@orderease/shared-dtos';
+export * from '@orderease/shared-contracts';

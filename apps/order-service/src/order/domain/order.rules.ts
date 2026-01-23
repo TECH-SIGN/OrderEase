@@ -4,7 +4,7 @@
  */
 
 import { OrderItem } from './order.entity';
-import { OrderDomainError } from '@orderease/shared-errors';
+import { OrderDomainError } from '@orderease/shared-contracts';
 
 /**
  * Validate order items are not empty

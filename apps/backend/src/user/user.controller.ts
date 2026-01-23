@@ -8,9 +8,9 @@ import {
   DefaultValuePipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateProfileDto, UpdatePasswordDto } from '@orderease/shared-dtos';
+import { UpdateProfileDto, UpdatePasswordDto } from '@orderease/shared-contracts';
 import { Auth, CurrentUser } from '../auth/decorators';
-import { MESSAGES } from '@orderease/shared-types';
+import { MESSAGES } from '@orderease/shared-contracts';
 import { successResponse } from '@orderease/shared-utils';
 
 @Controller('user')

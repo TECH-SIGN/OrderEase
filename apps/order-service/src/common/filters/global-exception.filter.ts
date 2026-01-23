@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { AppLoggerService } from '../logger/logger.service';
+import { AppLoggerService } from '@orderease/shared-logger';
 import { RequestWithContext } from '../middleware/request-context.middleware';
 
 /**

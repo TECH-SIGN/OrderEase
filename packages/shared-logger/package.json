@@ -1,0 +1,14 @@
+{
+  "name": "@orderease/shared-logger",
+  "version": "1.0.0",
+  "description": "Centralized logging service for all applications",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

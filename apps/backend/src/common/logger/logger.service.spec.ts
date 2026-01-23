@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { AppLoggerService, LogLevel } from './logger.service';
+import { AppLoggerService, LogLevel } from '@orderease/shared-logger';
 
 describe('AppLoggerService', () => {
   let service: AppLoggerService;

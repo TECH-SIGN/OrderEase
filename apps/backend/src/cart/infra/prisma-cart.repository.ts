@@ -4,7 +4,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database';
-import { Cart, CartItemProps } from '../domain/cart.entity';
+import { Cart, CartItemProps } from '@orderease/shared-contracts';
 import {
   ICartRepository,
   CartWithDetails,

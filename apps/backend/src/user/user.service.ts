@@ -4,14 +4,14 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UpdateProfileDto, UpdatePasswordDto } from '@orderease/shared-dtos';
+import { UpdateProfileDto, UpdatePasswordDto } from '@orderease/shared-contracts';
 import { hashPassword, comparePassword } from '@orderease/shared-utils';
-import { MESSAGES } from '@orderease/shared-types';
+import { MESSAGES } from '@orderease/shared-contracts';
 import {
   type IUserRepository,
   USER_REPOSITORY,
 } from './infra/user.repository.interface';
-import { User } from './domain/user.entity';
+import { User } from '@orderease/shared-contracts';
 
 @Injectable()
 export class UserService {

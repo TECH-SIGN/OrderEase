@@ -2,7 +2,7 @@
  * Cart Repository Interface
  */
 
-import { Cart } from '../domain/cart.entity';
+import { Cart } from '@orderease/shared-contracts';
 
 export interface CartWithDetails {
   cart: Cart;

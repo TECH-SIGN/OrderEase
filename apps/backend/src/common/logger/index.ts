@@ -1,1 +1,1 @@
-export * from './logger.service';
+export * from '@orderease/shared-logger';
