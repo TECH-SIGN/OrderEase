@@ -18,11 +18,22 @@ export const envSchema = z.object({
     .string()
     .min(32, 'JWT_SECRET must be at least 32 characters for security')
     .refine(
-      (val) =>
-        val !== 'default-secret-change-me' &&
-        val !== 'your_super_secret_jwt_key_here_change_in_production',
+      (val) => {
+        const trimmedVal = val.trim();
+        const forbiddenValues = [
+          'default-secret-change-me',
+          'your_super_secret_jwt_key_here_change_in_production',
+          'change_me',
+          'changeme',
+          'default',
+        ];
+        return !forbiddenValues.some(
+          (forbidden) => trimmedVal.toLowerCase().includes(forbidden),
+        );
+      },
       {
-        message: 'JWT_SECRET must not use default/example values in production',
+        message:
+          'JWT_SECRET must not use default/example values. Please set a unique, random secret.',
       },
     ),
   JWT_EXPIRES_IN: z.string().default('7d'),
@@ -30,12 +41,22 @@ export const envSchema = z.object({
     .string()
     .min(32, 'JWT_REFRESH_SECRET must be at least 32 characters for security')
     .refine(
-      (val) =>
-        val !== 'default-refresh-secret-change-me' &&
-        val !== 'your_super_secret_refresh_key_here_change_in_production',
+      (val) => {
+        const trimmedVal = val.trim();
+        const forbiddenValues = [
+          'default-refresh-secret-change-me',
+          'your_super_secret_refresh_key_here_change_in_production',
+          'change_me',
+          'changeme',
+          'default',
+        ];
+        return !forbiddenValues.some(
+          (forbidden) => trimmedVal.toLowerCase().includes(forbidden),
+        );
+      },
       {
         message:
-          'JWT_REFRESH_SECRET must not use default/example values in production',
+          'JWT_REFRESH_SECRET must not use default/example values. Please set a unique, random secret.',
       },
     ),
   JWT_REFRESH_EXPIRES_IN: z.string().default('30d'),
@@ -82,14 +103,29 @@ export function validateEnv(): EnvConfig {
       const errorMessages = error.issues
         .map((err) => {
           const path = err.path.join('.');
-          return `  ❌ ${path}: ${err.message}`;
+          const currentValue = process.env[path];
+          let displayValue = '';
+          
+          // Show partial value for debugging (hide sensitive parts)
+          if (currentValue && path.includes('SECRET')) {
+            displayValue = ` (current: ${currentValue.substring(0, 10)}...${currentValue.substring(currentValue.length - 4)})`;
+          } else if (currentValue) {
+            displayValue = ` (current: ${currentValue})`;
+          }
+          
+          return `  ❌ ${path}: ${err.message}${displayValue}`;
         })
         .join('\n');
 
       console.error('\n🚨 Environment Validation Failed:\n');
       console.error(errorMessages);
       console.error(
-        '\n💡 Please check your .env file and ensure all required variables are set correctly.\n',
+        '\n💡 Tips:',
+        '\n  • Ensure .env file exists in the app directory',
+        '\n  • JWT secrets must be at least 32 characters',
+        '\n  • Secrets cannot contain words like "default", "change_me", or example values',
+        '\n  • Generate secrets using: node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"',
+        '\n',
       );
 
       throw new Error('Invalid environment configuration');
