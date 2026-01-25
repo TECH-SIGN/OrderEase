@@ -27,7 +27,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  const port = process.env.PORT || 3000;
+  const port = 4000;
   await app.listen(port);
 
   console.log(`🚀 API Gateway running on: http://localhost:${port}`);
@@ -36,8 +36,6 @@ async function bootstrap() {
   console.log(`   - /api/users → Backend Service`);
   console.log(`   - /api/admin → Backend Service`);
   console.log(`   - /api/food → Backend Service`);
-  console.log(`   - /api/orders → Order Service`);
-  console.log(`   - /api/cart → Order Service`);
 }
 
 bootstrap();

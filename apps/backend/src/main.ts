@@ -168,7 +168,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  const port = configService.get<number>('app.port') || 3000;
+  // const port = configService.get<number>('app.port') || 3000;
+    const port = 3001;
   await app.listen(port);
 
   logger.log(`OrderEase RBAC API is running on: http://localhost:${port}`);

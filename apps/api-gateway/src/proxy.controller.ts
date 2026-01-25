@@ -45,16 +45,16 @@ export class ProxyController {
   // Route order requests to order service
   @All('order/*')
   async orderProxy(@Req() req: Request, @Res() res: Response) {
-    return this.proxy(req, res, 'order-service');
+    return this.proxy(req, res, 'backend');
   }
 
   // Route cart requests to order service
   @All('cart/*')
   async cartProxy(@Req() req: Request, @Res() res: Response) {
-    return this.proxy(req, res, 'order-service');
+    return this.proxy(req, res, 'backend');
   }
 
-  private async proxy(req: Request, res: Response, service: 'backend' | 'order-service') {
+  private async proxy(req: Request, res: Response, service: 'backend') {
     try {
       const path = req.url;
       const method = req.method;
@@ -64,8 +64,6 @@ export class ProxyController {
       let result;
       if (service === 'backend') {
         result = await this.proxyService.forwardToBackend(path, method, data, headers);
-      } else {
-        result = await this.proxyService.forwardToOrderService(path, method, data, headers);
       }
 
       return res.status(HttpStatus.OK).json(result);
