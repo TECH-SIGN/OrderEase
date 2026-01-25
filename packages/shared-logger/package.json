@@ -1,0 +1,19 @@
+{
+  "name": "@orderease/shared-logger",
+  "version": "1.0.0",
+  "description": "Centralized logging service for all applications",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.12",
+    "@nestjs/config": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.10",
+    "typescript": "^5.7.2"
+  }
+}

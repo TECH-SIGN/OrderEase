@@ -1,0 +1,18 @@
+{
+  "name": "@orderease/payment-service",
+  "version": "1.0.0",
+  "description": "OrderEase Payment Service - Payment processing and transactions",
+  "author": "TechSign",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "build": "echo 'Payment Service stub - no build needed yet'",
+    "dev": "echo 'Payment Service stub - not implemented yet'",
+    "start": "echo 'Payment Service stub - not implemented yet'"
+  },
+  "dependencies": {
+    "@orderease/shared-config": "workspace:*",
+    "@orderease/shared-errors": "workspace:*",
+    "@orderease/shared-utils": "workspace:*"
+  }
+}
