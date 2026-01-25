@@ -24,13 +24,25 @@ export class ProxyController {
     return this.proxy(req, res, 'backend');
   }
 
-  // Route food requests to backend
+  // Route food base requests to backend
+  @All('food')
+  async foodBaseProxy(@Req() req: Request, @Res() res: Response) {
+    return this.proxy(req, res, 'backend');
+  }
+
+  // Route food nested requests to backend
   @All('food/*')
   async foodProxy(@Req() req: Request, @Res() res: Response) {
     return this.proxy(req, res, 'backend');
   }
 
-  // Route public requests to backend
+  // Route public base requests to backend
+  @All('public')
+  async publicBaseProxy(@Req() req: Request, @Res() res: Response) {
+    return this.proxy(req, res, 'backend');
+  }
+
+  // Route public nested requests to backend
   @All('public/*')
   async publicProxy(@Req() req: Request, @Res() res: Response) {
     return this.proxy(req, res, 'backend');
