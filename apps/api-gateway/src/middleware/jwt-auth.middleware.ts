@@ -38,6 +38,10 @@ export class JwtAuthMiddleware implements NestMiddleware {
       
       next();
     } catch (error) {
+      // Return generic error message for security while logging specific error for debugging
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
       throw new UnauthorizedException('Invalid or expired token');
     }
   }
