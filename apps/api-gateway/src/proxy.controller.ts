@@ -61,7 +61,7 @@ export class ProxyController {
       const data = method === 'GET' ? req.query : req.body;
       const headers = req.headers;
 
-      let result;
+      let result: any;
       if (service === 'backend') {
         result = await this.proxyService.forwardToBackend(path, method, data, headers);
       }
