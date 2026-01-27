@@ -9,13 +9,10 @@ import { UserModule } from './user';
 // import { PublicModule } from './public';
 import { FoodModule } from './food';
 // import { OrderModule } from './order';
-// import { CartModule } from './cart';
+import { CartModule } from './cart';
 import { HealthModule } from './health';
 import { appConfig, databaseConfig, jwtConfig } from '@orderease/shared-config';
-import {
-  AppLoggerService,
-  RequestContextMiddleware,
-} from './gateway';
+import { AppLoggerService, RequestContextMiddleware } from './gateway';
 
 @Module({
   imports: [
@@ -32,7 +29,7 @@ import {
     UserModule,
     // PublicModule,
     FoodModule,
-    // CartModule,
+    CartModule,
     // OrderModule,
     HealthModule,
   ],

@@ -1,8 +1,8 @@
 // import { Test, TestingModule } from '@nestjs/testing';
 // import { NotFoundException, BadRequestException } from '@nestjs/common';
 // import { CartService } from './cart.service';
-// import { PrismaService } from '../database';
-// import { createMockPrismaService } from '../test-utils';
+// import { PrismaService } from '@orderease/shared-database';
+// import { createMockPrismaService } from '@orderease/shared-utils';
 
 // describe('CartService', () => {
 //   let service: CartService;
