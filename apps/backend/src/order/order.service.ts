@@ -1,226 +1,121 @@
-// import {
-//   Injectable,
-//   Inject,
-//   NotFoundException,
-//   BadRequestException,
-// } from '@nestjs/common';
-// import {
-//   CreateOrderDto,
-//   CreateOrderFromCartDto,
-//   UpdateOrderStatusDto,
-// } from '@orderease/shared-contracts';
-// import { MESSAGES } from '@orderease/shared-contracts';
-// import { Order, OrderItem } from './domain/order.entity';
-// import {
-//   validateOrderItems,
-//   validateItemQuantities,
-//   validateItemPrices,
-//   validateFoodAvailability,
-//   buildOrderItems,
-// } from './domain/order.rules';
-// import { OrderDomainError } from '@orderease/shared-contracts';
-// import {
-//   type IOrderRepository,
-//   ORDER_REPOSITORY,
-// } from './infra/order.repository.interface';
-// import {
-//   type IFoodRepository,
-//   FOOD_REPOSITORY,
-// } from '../food/infra/food.repository.interface';
-// import {
-//   type ICartRepository,
-//   CART_REPOSITORY,
-// } from '../cart/infra/cart.repository.interface';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { PrismaService } from '@orderease/shared-database';
+import { OrderEventType, EventSource } from '@prisma/client';
 
-// @Injectable()
-// export class OrderService {
-//   constructor(
-//     @Inject(ORDER_REPOSITORY)
-//     private orderRepository: IOrderRepository,
-//     @Inject(FOOD_REPOSITORY)
-//     private foodRepository: IFoodRepository,
-//     @Inject(CART_REPOSITORY)
-//     private cartRepository: ICartRepository,
-//   ) {}
+@Injectable()
+export class OrderService {
+  constructor(private readonly prisma: PrismaService) {}
 
-//   /**
-//    * Create a new order (for logged-in users)
-//    */
-//   async create(userId: string, createOrderDto: CreateOrderDto) {
-//     const { items } = createOrderDto;
+  /**
+   * Checkout - Convert user's cart into an order
+   * This is an idempotent, event-driven, snapshot-based checkout function
+   */
+  async checkout(userId: string, idempotencyKey: string): Promise<string> {
+    return await this.prisma.$transaction(async (tx) => {
+      // Step 1: Idempotency Guard
+      const existingOrder = await tx.order.findUnique({
+        where: { idempotencyKey },
+      });
 
-//     try {
-//       // Validate items using domain rules
-//       const requestedItems: OrderItem[] = items.map((item) => ({
-//         foodId: item.foodId,
-//         quantity: item.quantity,
-//         price: 0, // Will be set after fetching food
-//       }));
+      if (existingOrder) {
+        // Return existing order ID without creating anything new
+        return existingOrder.id;
+      }
 
-//       validateOrderItems(requestedItems);
-//       validateItemQuantities(requestedItems);
+      // Step 2: Cart Validation
+      // Fetch the cart belonging to the user
+      const cart = await tx.cart.findUnique({
+        where: { userId },
+        include: {
+          cartItems: {
+            include: {
+              food: true,
+            },
+          },
+        },
+      });
 
-//       // Get available food items
-//       const foodItems = await this.foodRepository.findAvailableByIds(
-//         items.map((item) => item.foodId),
-//       );
+      if (!cart || cart.cartItems.length === 0) {
+        throw new BadRequestException('Cart is empty');
+      }
 
-//       // Validate food availability
-//       validateFoodAvailability(
-//         items.map((item) => item.foodId),
-//         foodItems.map((f) => f.id!),
-//       );
+      // Validate that all foods are available
+      const unavailableFoods = cart.cartItems.filter(
+        (item) => !item.food.isAvailable,
+      );
 
-//       // Build order items with prices
-//       const foodPrices = new Map(
-//         foodItems.map((food) => [food.id!, food.price]),
-//       );
+      if (unavailableFoods.length > 0) {
+        throw new BadRequestException(
+          `Some food items are not available: ${unavailableFoods.map((item) => item.food.name).join(', ')}`,
+        );
+      }
 
-//       const orderItems = buildOrderItems(
-//         items.map((item) => ({
-//           foodId: item.foodId,
-//           quantity: item.quantity,
-//         })),
-//         foodPrices,
-//       );
+      // Step 3: Order Creation
+      const order = await tx.order.create({
+        data: {
+          userId,
+          idempotencyKey,
+        },
+      });
 
-//       validateItemPrices(orderItems);
+      // Step 4: Snapshot OrderItems
+      // Create order items by copying food name and price from Food table
+      // Note: Using Float for prices as defined in schema. For production,
+      // consider using Decimal type or storing prices in cents as integers
+      let totalPrice = 0;
+      const totalItemCount = cart.cartItems.length;
 
-//       // Create domain order
-//       const order = new Order({
-//         userId,
-//         items: orderItems,
-//       });
+      const orderItemsData = cart.cartItems.map((cartItem) => {
+        const itemTotal = cartItem.food.price * cartItem.quantity;
+        totalPrice += itemTotal;
 
-//       // Persist order
-//       return await this.orderRepository.create(order);
-//     } catch (error) {
-//       if (error instanceof OrderDomainError) {
-//         // Map domain errors to appropriate HTTP exceptions
-//         if (
-//           error.code === 'EMPTY_ORDER' ||
-//           error.code === 'INVALID_QUANTITY' ||
-//           error.code === 'INVALID_PRICE'
-//         ) {
-//           throw new BadRequestException(error.message);
-//         }
-//         throw new NotFoundException(error.message);
-//       }
-//       throw error;
-//     }
-//   }
+        return {
+          orderId: order.id,
+          foodId: cartItem.foodId,
+          foodName: cartItem.food.name,
+          price: cartItem.food.price,
+          quantity: cartItem.quantity,
+        };
+      });
 
-//   /**
-//    * Create order from user's cart
-//    */
-//   async createFromCart(
-//     userId: string,
-//     createOrderFromCartDto: CreateOrderFromCartDto,
-//   ) {
-//     const { clearCart = true } = createOrderFromCartDto;
+      await tx.orderItem.createMany({
+        data: orderItemsData,
+      });
 
-//     try {
-//       // Get user's cart with details
-//       const cartData =
-//         await this.cartRepository.findByUserIdWithDetails(userId);
+      // Step 5: Event Logging
+      // Create ORDER_REQUESTED event
+      await tx.orderEvent.create({
+        data: {
+          orderId: order.id,
+          type: OrderEventType.ORDER_REQUESTED,
+          causedBy: EventSource.USER,
+          payload: {
+            totalPrice,
+            totalItemCount,
+          },
+        },
+      });
 
-//       if (!cartData || cartData.cart.isEmpty()) {
-//         throw OrderDomainError.emptyCart();
-//       }
+      // Create ORDER_VALIDATED event
+      await tx.orderEvent.create({
+        data: {
+          orderId: order.id,
+          type: OrderEventType.ORDER_VALIDATED,
+          causedBy: EventSource.SYSTEM,
+          payload: {
+            totalPrice,
+            totalItemCount,
+          },
+        },
+      });
 
-//       const { cart, foodDetails } = cartData;
+      // Step 6: Cleanup
+      // Delete all cart items for this cart
+      await tx.cartItem.deleteMany({
+        where: { cartId: cart.id },
+      });
 
-//       // Verify all food items are still available
-//       const unavailableItems = cart.items.filter(
-//         (item) => !foodDetails.get(item.foodId)?.isAvailable,
-//       );
-//       if (unavailableItems.length > 0) {
-//         throw OrderDomainError.unavailableFood();
-//       }
-
-//       // Build order items from cart
-//       const foodPrices = new Map(
-//         Array.from(foodDetails.entries()).map(([id, details]) => [
-//           id,
-//           details.price,
-//         ]),
-//       );
-
-//       const orderItems = buildOrderItems(cart.items, foodPrices);
-//       validateOrderItems(orderItems);
-//       validateItemQuantities(orderItems);
-//       validateItemPrices(orderItems);
-
-//       // Create domain order
-//       const order = new Order({
-//         userId,
-//         items: orderItems,
-//       });
-
-//       // Persist order
-//       const createdOrder = await this.orderRepository.create(order);
-
-//       // Clear cart if requested
-//       if (clearCart) {
-//         await this.cartRepository.clearCart(userId);
-//       }
-
-//       return createdOrder;
-//     } catch (error) {
-//       if (error instanceof OrderDomainError) {
-//         throw new NotFoundException(error.message);
-//       }
-//       throw error;
-//     }
-//   }
-
-//   /**
-//    * Get all orders (Admin only)
-//    */
-//   async findAll(page = 1, limit = 10, status?: string) {
-//     const result = await this.orderRepository.findAll(page, limit, { status });
-
-//     return {
-//       orders: result.orders,
-//       pagination: {
-//         total: result.total,
-//         page,
-//         limit,
-//         totalPages: Math.ceil(result.total / limit),
-//       },
-//     };
-//   }
-
-//   /**
-//    * Get order by ID
-//    */
-//   async findOne(id: string) {
-//     const order = await this.orderRepository.findById(id);
-
-//     if (!order) {
-//       throw new NotFoundException(MESSAGES.GENERAL.NOT_FOUND);
-//     }
-
-//     return order;
-//   }
-
-//   /**
-//    * Update order status (Admin only)
-//    */
-//   async updateStatus(id: string, updateStatusDto: UpdateOrderStatusDto) {
-//     await this.findOne(id); // Check if exists
-
-//     return this.orderRepository.updateStatus(id, updateStatusDto.status);
-//   }
-
-//   /**
-//    * Delete order (Admin only)
-//    */
-//   async remove(id: string) {
-//     await this.findOne(id); // Check if exists
-
-//     await this.orderRepository.delete(id);
-
-//     return { message: 'Order deleted successfully' };
-//   }
-// }
+      return order.id;
+    });
+  }
+}

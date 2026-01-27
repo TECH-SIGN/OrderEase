@@ -8,7 +8,7 @@ import { AdminModule } from './admin';
 import { UserModule } from './user';
 // import { PublicModule } from './public';
 import { FoodModule } from './food';
-// import { OrderModule } from './order';
+import { OrderModule } from './order';
 import { CartModule } from './cart';
 import { HealthModule } from './health';
 import { appConfig, databaseConfig, jwtConfig } from '@orderease/shared-config';
@@ -30,7 +30,7 @@ import { AppLoggerService, RequestContextMiddleware } from './gateway';
     // PublicModule,
     FoodModule,
     CartModule,
-    // OrderModule,
+    OrderModule,
     HealthModule,
   ],
   controllers: [AppController],
