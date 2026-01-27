@@ -1,50 +1,20 @@
-// /**
-//  * Order Repository Interface
-//  * Defines contract for order persistence without implementation details
-//  * Domain layer can depend on this interface without knowing about Prisma
-//  */
+/**
+ * Order Repository Interface
+ * Defines contract for order persistence without implementation details
+ * Domain layer can depend on this interface without knowing about Prisma
+ */
 
-// import { Order } from '../domain/order.entity';
+export interface IOrderRepository {
+  /**
+   * Checkout - Convert user's cart into an order
+   * This is an idempotent, event-driven, snapshot-based checkout function
+   * 
+   * @param userId - The ID of the user checking out
+   * @param idempotencyKey - Unique key to ensure idempotency
+   * @returns The order ID (existing or newly created)
+   * @throws BadRequestException if cart is empty or food items are unavailable
+   */
+  checkout(userId: string, idempotencyKey: string): Promise<string>;
+}
 
-// export interface OrderListFilter {
-//   status?: string;
-//   userId?: string;
-// }
-
-// export interface OrderListResult {
-//   orders: Order[];
-//   total: number;
-// }
-
-// export interface IOrderRepository {
-//   /**
-//    * Create a new order
-//    */
-//   create(order: Order): Promise<Order>;
-
-//   /**
-//    * Find order by ID
-//    */
-//   findById(id: string): Promise<Order | null>;
-
-//   /**
-//    * Find orders with pagination and filters
-//    */
-//   findAll(
-//     page: number,
-//     limit: number,
-//     filter?: OrderListFilter,
-//   ): Promise<OrderListResult>;
-
-//   /**
-//    * Update order status
-//    */
-//   updateStatus(id: string, status: string): Promise<Order>;
-
-//   /**
-//    * Delete order by ID
-//    */
-//   delete(id: string): Promise<void>;
-// }
-
-// export const ORDER_REPOSITORY = Symbol('IOrderRepository');
+export const ORDER_REPOSITORY = Symbol('IOrderRepository');
