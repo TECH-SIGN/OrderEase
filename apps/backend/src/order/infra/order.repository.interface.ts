@@ -8,7 +8,7 @@ export interface IOrderRepository {
   /**
    * Checkout - Convert user's cart into an order
    * This is an idempotent, event-driven, snapshot-based checkout function
-   * 
+   *
    * @param userId - The ID of the user checking out
    * @param idempotencyKey - Unique key to ensure idempotency
    * @returns The order ID (existing or newly created)
