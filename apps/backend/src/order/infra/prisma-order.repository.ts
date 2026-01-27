@@ -10,7 +10,7 @@ import { IOrderRepository } from './order.repository.interface';
 
 @Injectable()
 export class PrismaOrderRepository implements IOrderRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   /**
    * Checkout - Convert user's cart into an order
@@ -18,18 +18,20 @@ export class PrismaOrderRepository implements IOrderRepository {
    */
   async checkout(userId: string, idempotencyKey: string): Promise<string> {
     return await this.prisma.$transaction(async (tx) => {
+      // ===============================
       // Step 1: Idempotency Guard
-      const existingOrder = await tx.order.findUnique({
-        where: { idempotencyKey },
+      // ===============================
+      const existingIdempotency = await tx.idempotencyKey.findUnique({
+        where: { key: idempotencyKey },
       });
 
-      if (existingOrder) {
-        // Return existing order ID without creating anything new
-        return existingOrder.id;
+      if (existingIdempotency) {
+        return (existingIdempotency.response as { orderId: string }).orderId;
       }
 
+      // ===============================
       // Step 2: Cart Validation
-      // Fetch the cart belonging to the user
+      // ===============================
       const cart = await tx.cart.findUnique({
         where: { userId },
         include: {
@@ -45,18 +47,21 @@ export class PrismaOrderRepository implements IOrderRepository {
         throw new BadRequestException('Cart is empty');
       }
 
-      // Validate that all foods are available
       const unavailableFoods = cart.cartItems.filter(
         (item) => !item.food.isAvailable,
       );
 
       if (unavailableFoods.length > 0) {
         throw new BadRequestException(
-          `Some food items are not available: ${unavailableFoods.map((item) => item.food.name).join(', ')}`,
+          `Some food items are not available: ${unavailableFoods
+            .map((item) => item.food.name)
+            .join(', ')}`,
         );
       }
 
-      // Step 3: Order Creation
+      // ===============================
+      // Step 3: Order Creation (identity only)
+      // ===============================
       const order = await tx.order.create({
         data: {
           userId,
@@ -64,16 +69,16 @@ export class PrismaOrderRepository implements IOrderRepository {
         },
       });
 
+      // ===============================
       // Step 4: Snapshot OrderItems
-      // Create order items by copying food name and price from Food table
-      // Note: Using Float for prices as defined in schema. For production,
-      // consider using Decimal type or storing prices in cents as integers
+      // ===============================
       let totalPrice = 0;
-      const totalItemCount = cart.cartItems.length;
+      let totalItemCount = 0;
 
       const orderItemsData = cart.cartItems.map((cartItem) => {
         const itemTotal = cartItem.food.price * cartItem.quantity;
         totalPrice += itemTotal;
+        totalItemCount += cartItem.quantity;
 
         return {
           orderId: order.id,
@@ -88,35 +93,48 @@ export class PrismaOrderRepository implements IOrderRepository {
         data: orderItemsData,
       });
 
+      // ===============================
       // Step 5: Event Logging
-      // Create ORDER_REQUESTED event
-      await tx.orderEvent.create({
+      // ===============================
+      await tx.orderEvent.createMany({
+        data: [
+          {
+            orderId: order.id,
+            type: OrderEventType.ORDER_REQUESTED,
+            causedBy: EventSource.USER,
+            payload: {
+              totalPrice,
+              totalItemCount,
+            },
+          },
+          {
+            orderId: order.id,
+            type: OrderEventType.ORDER_VALIDATED,
+            causedBy: EventSource.SYSTEM,
+            payload: {
+              totalPrice,
+              totalItemCount,
+            },
+          },
+        ],
+      });
+
+      // ===============================
+      // Step 6: Persist Idempotency Result
+      // ===============================
+      await tx.idempotencyKey.create({
         data: {
-          orderId: order.id,
-          type: OrderEventType.ORDER_REQUESTED,
-          causedBy: EventSource.USER,
-          payload: {
-            totalPrice,
-            totalItemCount,
+          key: idempotencyKey,
+          requestHash: `${userId}:${cart.id}`, // simple deterministic hash
+          response: {
+            orderId: order.id,
           },
         },
       });
 
-      // Create ORDER_VALIDATED event
-      await tx.orderEvent.create({
-        data: {
-          orderId: order.id,
-          type: OrderEventType.ORDER_VALIDATED,
-          causedBy: EventSource.SYSTEM,
-          payload: {
-            totalPrice,
-            totalItemCount,
-          },
-        },
-      });
-
-      // Step 6: Cleanup
-      // Delete all cart items for this cart
+      // ===============================
+      // Step 7: Cleanup
+      // ===============================
       await tx.cartItem.deleteMany({
         where: { cartId: cart.id },
       });
