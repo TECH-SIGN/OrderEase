@@ -79,16 +79,16 @@ export class PrismaFoodRepository implements IFoodRepository {
     return prismaFoods.map((pf) => this.toDomain(pf));
   }
 
-async update(id: string, data: FoodUpdateData): Promise<Food> {
-  const prismaFood = await this.prisma.food.update({
-    where: { id },
-    data: Object.fromEntries(
-      Object.entries(data).filter(([, value]) => value !== undefined),
-    ),
-  });
+  async update(id: string, data: FoodUpdateData): Promise<Food> {
+    const prismaFood = await this.prisma.food.update({
+      where: { id },
+      data: Object.fromEntries(
+        Object.entries(data).filter(([, value]) => value !== undefined),
+      ),
+    });
 
-  return this.toDomain(prismaFood);
-}
+    return this.toDomain(prismaFood);
+  }
 
   async delete(id: string): Promise<void> {
     await this.prisma.food.delete({

@@ -39,10 +39,7 @@ export class FoodController {
     @Query('category') category?: string,
     @Query('includeUnavailable') includeUnavailable: boolean = true,
   ) {
-    const foods = await this.foodService.findAll(
-      category,
-      includeUnavailable,
-    );
+    const foods = await this.foodService.findAll(category, includeUnavailable);
     return successResponse(MESSAGES.GENERAL.SUCCESS, foods);
   }
 

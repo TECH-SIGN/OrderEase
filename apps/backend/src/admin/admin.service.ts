@@ -1,5 +1,8 @@
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
-import { UpdateUserRoleDto, AdminUpdateUserDto } from '@orderease/shared-contracts';
+import {
+  UpdateUserRoleDto,
+  AdminUpdateUserDto,
+} from '@orderease/shared-contracts';
 import { MESSAGES } from '@orderease/shared-contracts';
 import {
   type IUserRepository,
@@ -23,7 +26,7 @@ export class AdminService {
    * Get dashboard statistics
    */
   // async getDashboard() {
-  //   const [totalUsers, totalAdmins, 
+  //   const [totalUsers, totalAdmins,
   //     // totalOrders, recentOrdersResult
   //   ] =
   //     await Promise.all([
@@ -71,9 +74,9 @@ export class AdminService {
     }
 
     // Get recent orders for the user
-      // const ordersResult = await this.orderRepository.findAll(1, 5, {
-      //   userId: id,
-      // });
+    // const ordersResult = await this.orderRepository.findAll(1, 5, {
+    //   userId: id,
+    // });
 
     return {
       ...user.toSafeUser(),
