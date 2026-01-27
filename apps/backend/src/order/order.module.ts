@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { OrderController } from './order.controller';
-import { OrderService } from './order.service';
+import { OrderApplicationService } from './application/order.service';
+import { PaymentOrchestratorService } from './application/payment-orchestrator.service';
 import { DatabaseModule } from '@orderease/shared-database';
 import { PrismaOrderRepository } from './infra/prisma-order.repository';
 import { ORDER_REPOSITORY } from './infra/order.repository.interface';
@@ -9,12 +10,13 @@ import { ORDER_REPOSITORY } from './infra/order.repository.interface';
   imports: [DatabaseModule],
   controllers: [OrderController],
   providers: [
-    OrderService,
+    OrderApplicationService,
+    PaymentOrchestratorService,
     {
       provide: ORDER_REPOSITORY,
       useClass: PrismaOrderRepository,
     },
   ],
-  exports: [OrderService, ORDER_REPOSITORY],
+  exports: [OrderApplicationService, ORDER_REPOSITORY],
 })
 export class OrderModule {}
