@@ -57,7 +57,11 @@ export class FoodService {
    * Update food item
    */
   async update(id: string, updateFoodDto: UpdateFoodDto) {
-    await this.findOne(id); // Check if exists
+    // Check if exists (use repository directly to avoid unnecessary conversion)
+    const existing = await this.foodRepository.findById(id);
+    if (!existing) {
+      throw new NotFoundException(MESSAGES.GENERAL.NOT_FOUND);
+    }
 
     // Create properly typed update object
     const updateData: {
@@ -89,7 +93,11 @@ export class FoodService {
    * Delete food item
    */
   async remove(id: string) {
-    await this.findOne(id); // Check if exists
+    // Check if exists (use repository directly to avoid unnecessary conversion)
+    const existing = await this.foodRepository.findById(id);
+    if (!existing) {
+      throw new NotFoundException(MESSAGES.GENERAL.NOT_FOUND);
+    }
 
     await this.foodRepository.delete(id);
 
@@ -99,7 +107,7 @@ export class FoodService {
   /**
    * Format food output - convert price from cents to display format
    */
-  private formatFoodOutput(food: any) {
+  private formatFoodOutput(food: Food) {
     return {
       ...food,
       price: centsToDisplay(food.price),

@@ -3,22 +3,10 @@
 -- Example: $10.00 becomes 1000 cents
 
 -- Step 1: Convert Food.price from Float to Int (multiply by 100 and round)
--- First update existing data
-UPDATE "foods" SET "price" = ROUND("price" * 100);
-
--- Then change column type
-ALTER TABLE "foods" ALTER COLUMN "price" TYPE INTEGER USING ROUND("price");
+ALTER TABLE "foods" ALTER COLUMN "price" TYPE INTEGER USING ROUND("price" * 100);
 
 -- Step 2: Convert OrderItem.price from Float to Int (multiply by 100 and round)
--- First update existing data
-UPDATE "order_items" SET "price" = ROUND("price" * 100);
-
--- Then change column type
-ALTER TABLE "order_items" ALTER COLUMN "price" TYPE INTEGER USING ROUND("price");
+ALTER TABLE "order_items" ALTER COLUMN "price" TYPE INTEGER USING ROUND("price" * 100);
 
 -- Step 3: Convert Payment.amount from Float to Int (multiply by 100 and round)
--- First update existing data
-UPDATE "payments" SET "amount" = ROUND("amount" * 100);
-
--- Then change column type
-ALTER TABLE "payments" ALTER COLUMN "amount" TYPE INTEGER USING ROUND("amount");
+ALTER TABLE "payments" ALTER COLUMN "amount" TYPE INTEGER USING ROUND("amount" * 100);

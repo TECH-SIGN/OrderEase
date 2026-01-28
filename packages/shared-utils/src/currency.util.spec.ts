@@ -10,12 +10,19 @@ describe('Currency Utilities', () => {
     });
 
     it('should handle rounding for precision issues', () => {
+      // Note: This handles floating-point arithmetic issues
+      // 10.995 * 100 = 1099.5 due to floating-point, which rounds to 1100
       expect(displayToCents(10.995)).toBe(1100); // Rounds up
       expect(displayToCents(10.994)).toBe(1099); // Rounds down
     });
 
     it('should handle zero', () => {
       expect(displayToCents(0)).toBe(0);
+    });
+
+    it('should throw error for negative values', () => {
+      expect(() => displayToCents(-10.0)).toThrow('does not accept negative values');
+      expect(() => displayToCents(-0.01)).toThrow('does not accept negative values');
     });
   });
 
@@ -29,6 +36,16 @@ describe('Currency Utilities', () => {
 
     it('should handle zero', () => {
       expect(centsToDisplay(0)).toBe(0);
+    });
+
+    it('should throw error for negative values', () => {
+      expect(() => centsToDisplay(-1000)).toThrow('does not accept negative values');
+      expect(() => centsToDisplay(-1)).toThrow('does not accept negative values');
+    });
+
+    it('should throw error for non-integer values', () => {
+      expect(() => centsToDisplay(10.5)).toThrow('expects an integer');
+      expect(() => centsToDisplay(1599.99)).toThrow('expects an integer');
     });
   });
 
